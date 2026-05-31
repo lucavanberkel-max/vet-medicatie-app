@@ -1168,6 +1168,497 @@
           "bronnen": ["KNMVD Formularium Konijn 2022"]
         }
       }
+    },
+    {
+      "id": "ketamine",
+      "naam": "Ketamine",
+      "werkzameStof": "Ketamine",
+      "merknamen": ["Narketan", "Ketavet", "Ketamine Alfasan"],
+      "categorie": "sedativum",
+      "beschrijving": "Dissociatief anestheticum; altijd combineren met sedativum (bijv. medetomidine of midazolam) voor betere spierrelaxatie",
+      "soorten": {
+        "hond": {
+          "dosis": { "min": 2, "max": 10, "eenheid": "mg/kg", "frequentie": "eenmalig", "opmerkingen": "Inductie IV: 2-4 mg/kg; sedatie IM: 5-10 mg/kg (altijd combineren met medetomidine of midazolam)" },
+          "toediening": {
+            "injectie": { "concentratie": 100, "eenheid": "mg/ml", "routes": ["IV", "IM"], "opmerkingen": "Narketan 100 mg/ml; ook 50 mg/ml beschikbaar" }
+          },
+          "waarschuwingen": ["Gecontroleerde stof", "ALTIJD combineren met sedativum – solo gebruik geeft spiertrekkingen", "Verhoogde speekselvorming – atropine premedicatie overwegen", "Verhoogt intracraniële druk"],
+          "contra_indicaties": ["Verhoogde intracraniële druk", "Hypertensie", "Epilepsie"],
+          "bronnen": ["Fidin", "Vetcompendium"]
+        },
+        "kat": {
+          "dosis": { "min": 5, "max": 15, "eenheid": "mg/kg", "frequentie": "eenmalig", "opmerkingen": "Sedatie IM: 5-15 mg/kg; inductie IV: 2-4 mg/kg; standaard combinatie: ketamine 10 mg/kg + medetomidine 100 μg/kg IM" },
+          "toediening": {
+            "injectie": { "concentratie": 100, "eenheid": "mg/ml", "routes": ["IV", "IM"], "opmerkingen": "" }
+          },
+          "waarschuwingen": ["Gecontroleerde stof", "Altijd combineren met sedativum", "Katten herstellen snel – goede monitoring noodzakelijk", "Verhoogde speekselvorming"],
+          "bronnen": ["Fidin", "Vetcompendium"]
+        },
+        "konijn": {
+          "dosis": { "min": 15, "max": 35, "eenheid": "mg/kg", "frequentie": "eenmalig", "opmerkingen": "Altijd combineren: ketamine 15-35 mg/kg + medetomidine 0.2-0.5 mg/kg IM; hoge mortaliteit bij solo gebruik" },
+          "toediening": {
+            "injectie": { "concentratie": 100, "eenheid": "mg/ml", "routes": ["IM"], "opmerkingen": "IM injectie achterste dij of lumbaal" }
+          },
+          "waarschuwingen": ["Gecontroleerde stof", "Hoge mortaliteit bij konijnen – ALTIJD combineren met medetomidine of midazolam", "Ademdepressie – zuurstof en intubatiemateriaal gereed houden", "Hypothermie risico – actieve verwarming noodzakelijk"],
+          "toxiciteit": "HOOG RISICO bij solo gebruik bij konijnen",
+          "bronnen": ["KNMVD Formularium Konijn 2022"]
+        },
+        "cavia": {
+          "dosis": { "min": 40, "max": 100, "eenheid": "mg/kg", "frequentie": "eenmalig", "opmerkingen": "Cavia's vereisen hoge doses; combineren met medetomidine 0.5 mg/kg IM" },
+          "toediening": {
+            "injectie": { "concentratie": 100, "eenheid": "mg/ml", "routes": ["IM"], "opmerkingen": "" }
+          },
+          "waarschuwingen": ["Gecontroleerde stof", "Hoge dosisbehoefte bij cavia's", "Ademdepressie monitoren"],
+          "bronnen": ["Carpenter Exotic Animal Formulary 5th Ed."]
+        },
+        "kanarie": {
+          "dosis": { "min": 10, "max": 50, "eenheid": "mg/kg", "frequentie": "eenmalig", "opmerkingen": "Korte ingrepen; nauwkeurige weging essentieel" },
+          "toediening": {
+            "injectie": { "concentratie": 100, "eenheid": "mg/ml", "routes": ["IM"], "opmerkingen": "Sterk verdunnen voor kleine volumes" }
+          },
+          "waarschuwingen": ["Gecontroleerde stof", "Kleine volumes vereisen verdunning", "Smalle veiligheidsmarge bij vogels"],
+          "bronnen": ["Carpenter Exotic Animal Formulary 5th Ed."]
+        },
+        "duif": {
+          "dosis": { "min": 10, "max": 50, "eenheid": "mg/kg", "frequentie": "eenmalig", "opmerkingen": "" },
+          "toediening": {
+            "injectie": { "concentratie": 100, "eenheid": "mg/ml", "routes": ["IM"], "opmerkingen": "Borstspier injectie" }
+          },
+          "waarschuwingen": ["Gecontroleerde stof", "Verdunnen voor kleine volumes"],
+          "bronnen": ["Carpenter Exotic Animal Formulary 5th Ed."]
+        },
+        "paard": {
+          "dosis": { "min": 2.2, "max": 2.2, "eenheid": "mg/kg", "frequentie": "eenmalig", "opmerkingen": "IV als deel van TIVA (bijv. xylazine/ketamine); altijd na sedatie" },
+          "toediening": {
+            "injectie": { "concentratie": 100, "eenheid": "mg/ml", "routes": ["IV"], "opmerkingen": "Na xylazine of detomidine IV" }
+          },
+          "waarschuwingen": ["Gecontroleerde stof", "Alleen na adequate sedatie (alpha2-agonist)", "Risico op vallen bij niet-gesedeerde paarden"],
+          "bronnen": ["Fidin"]
+        }
+      }
+    },
+    {
+      "id": "alfaxalone",
+      "naam": "Alfaxalone",
+      "werkzameStof": "Alfaxalone",
+      "merknamen": ["Alfaxan"],
+      "categorie": "sedativum",
+      "beschrijving": "Neuroactief steroïd anestheticum; geschikt voor inductie en korte anesthesie; veilig bij katten en honden",
+      "soorten": {
+        "hond": {
+          "dosis": { "min": 2, "max": 4, "eenheid": "mg/kg", "frequentie": "eenmalig", "opmerkingen": "IV inductie langzaam titreren: 2-3 mg/kg IV; IM sedatie: 3-4 mg/kg" },
+          "toediening": {
+            "injectie": { "concentratie": 10, "eenheid": "mg/ml", "routes": ["IV", "IM"], "opmerkingen": "Alfaxan 10 mg/ml" }
+          },
+          "waarschuwingen": ["Apneu mogelijk bij snelle IV toediening – langzaam titreren", "Ademhalingsondersteuning beschikbaar houden"],
+          "bronnen": ["Fidin", "Vetcompendium"]
+        },
+        "kat": {
+          "dosis": { "min": 2, "max": 5, "eenheid": "mg/kg", "frequentie": "eenmalig", "opmerkingen": "IV inductie: 2-3 mg/kg langzaam; IM sedatie: 5 mg/kg; goed geschikt voor katten" },
+          "toediening": {
+            "injectie": { "concentratie": 10, "eenheid": "mg/ml", "routes": ["IV", "IM"], "opmerkingen": "" }
+          },
+          "waarschuwingen": ["Langzame IV toediening (>60 seconden)", "Apneu mogelijk"],
+          "bronnen": ["Fidin", "Vetcompendium"]
+        },
+        "konijn": {
+          "dosis": { "min": 3, "max": 9, "eenheid": "mg/kg", "frequentie": "eenmalig", "opmerkingen": "IM: 6-9 mg/kg; IV: 3-5 mg/kg; goed alternatief voor ketamine/medetomidine" },
+          "toediening": {
+            "injectie": { "concentratie": 10, "eenheid": "mg/ml", "routes": ["IV", "IM"], "opmerkingen": "" }
+          },
+          "waarschuwingen": ["Ademdepressie monitoren", "Zuurstof en intubatie beschikbaar houden"],
+          "bronnen": ["KNMVD Formularium Konijn 2022"]
+        }
+      }
+    },
+    {
+      "id": "atipamezole",
+      "naam": "Atipamezole",
+      "werkzameStof": "Atipamezole",
+      "merknamen": ["Antisedan", "Revertor"],
+      "categorie": "sedativum",
+      "beschrijving": "Alpha-2 antagonist; specifiek reversiemiddel voor medetomidine en dexmedetomidine",
+      "soorten": {
+        "hond": {
+          "dosis": { "min": 0.2, "max": 0.4, "eenheid": "mg/kg", "frequentie": "eenmalig", "opmerkingen": "5x de medetomidine dosis (mg) IM. Bijv.: medetomidine 0.04 mg/kg → atipamezole 0.2 mg/kg" },
+          "toediening": {
+            "injectie": { "concentratie": 5, "eenheid": "mg/ml", "routes": ["IM"], "opmerkingen": "Antisedan 5 mg/ml; NIET IV – te snelle reversal veroorzaakt hypertensie" }
+          },
+          "waarschuwingen": ["NOOIT IV toedienen – risico op levensgevaarlijke hypertensie", "Altijd IM toedienen", "Werking treedt in na 5-15 minuten"],
+          "contra_indicaties": ["IV toediening"],
+          "bronnen": ["Fidin", "Vetcompendium"]
+        },
+        "kat": {
+          "dosis": { "min": 0.2, "max": 0.4, "eenheid": "mg/kg", "frequentie": "eenmalig", "opmerkingen": "5x de medetomidine dosis IM" },
+          "toediening": {
+            "injectie": { "concentratie": 5, "eenheid": "mg/ml", "routes": ["IM"], "opmerkingen": "" }
+          },
+          "waarschuwingen": ["NOOIT IV", "IM toedienen"],
+          "contra_indicaties": ["IV toediening"],
+          "bronnen": ["Fidin", "Vetcompendium"]
+        },
+        "konijn": {
+          "dosis": { "min": 0.5, "max": 1.0, "eenheid": "mg/kg", "frequentie": "eenmalig", "opmerkingen": "0.5-1 mg/kg IM; 5-10x de medetomidine dosis" },
+          "toediening": {
+            "injectie": { "concentratie": 5, "eenheid": "mg/ml", "routes": ["IM", "SC"], "opmerkingen": "" }
+          },
+          "waarschuwingen": ["IM toediening voorkeur"],
+          "bronnen": ["KNMVD Formularium Konijn 2022"]
+        }
+      }
+    },
+    {
+      "id": "acepromazine",
+      "naam": "Acepromazine",
+      "werkzameStof": "Acepromazine",
+      "merknamen": ["Vetranquil", "Acepromaz"],
+      "categorie": "sedativum",
+      "beschrijving": "Fenothiazine tranquillizer; premedicatie en sedatie; GEEN analgetisch effect",
+      "soorten": {
+        "hond": {
+          "dosis": { "min": 0.025, "max": 0.1, "eenheid": "mg/kg", "frequentie": "eenmalig", "opmerkingen": "Max absolute dosis 3 mg ongeacht gewicht; premedicatie 30-60 min voor ingreep" },
+          "toediening": {
+            "injectie": { "concentratie": 10, "eenheid": "mg/ml", "routes": ["IM", "SC"], "opmerkingen": "Vetranquil 10 mg/ml; NOOIT IV als enig middel" }
+          },
+          "waarschuwingen": ["Maximale totaaldosis 3 mg bij grote honden", "Geen pijnstilling – altijd combineren met analgeticum", "Hypotensie mogelijk – voorzichtig bij dehydratie/shock", "MDR1-positieve rassen: lagere dosis (0.025 mg/kg)"],
+          "contra_indicaties": ["Shock", "Ernstige dehydratie", "Epilepsie", "Lever- of nierfalen"],
+          "bronnen": ["Fidin", "Vetcompendium"]
+        },
+        "kat": {
+          "dosis": { "min": 0.025, "max": 0.1, "eenheid": "mg/kg", "frequentie": "eenmalig", "opmerkingen": "Max absolute dosis 1 mg bij katten; premedicatie" },
+          "toediening": {
+            "injectie": { "concentratie": 10, "eenheid": "mg/ml", "routes": ["IM", "SC"], "opmerkingen": "" }
+          },
+          "waarschuwingen": ["Maximale totaaldosis 1 mg bij katten", "Geen analgesie – altijd combineren"],
+          "bronnen": ["Fidin", "Vetcompendium"]
+        },
+        "paard": {
+          "dosis": { "min": 0.025, "max": 0.05, "eenheid": "mg/kg", "frequentie": "eenmalig", "opmerkingen": "Alleen IM; NOOIT IV bij paarden (fatale cardiovasculaire collaps)" },
+          "toediening": {
+            "injectie": { "concentratie": 10, "eenheid": "mg/ml", "routes": ["IM"], "opmerkingen": "UITSLUITEND IM bij paarden" }
+          },
+          "waarschuwingen": ["LEVENSGEVAARLIJK IV bij paarden – uitsluitend IM toedienen!", "Paraphimose (penisparese) kan optreden bij hengsten", "Penile paralysis risico bij mannelijke paarden"],
+          "toxiciteit": "LEVENSGEVAARLIJK IV bij paarden",
+          "contra_indicaties": ["IV toediening bij paarden", "Hengsten bij langdurig gebruik"],
+          "bronnen": ["Fidin"]
+        }
+      }
+    },
+    {
+      "id": "propofol",
+      "naam": "Propofol",
+      "werkzameStof": "Propofol",
+      "merknamen": ["Rapinovet", "PropoFlo", "Propofol-Lipuro"],
+      "categorie": "sedativum",
+      "beschrijving": "Intraveneus anestheticum voor inductie en TIVA; korte werkingsduur, snell herstel",
+      "soorten": {
+        "hond": {
+          "dosis": { "min": 4, "max": 6, "eenheid": "mg/kg", "frequentie": "eenmalig", "opmerkingen": "Langzaam IV titreren tot effect (0.5-1 mg/kg per injectie); na premedicatie lagere dosis nodig (2-4 mg/kg)" },
+          "toediening": {
+            "injectie": { "concentratie": 10, "eenheid": "mg/ml", "routes": ["IV"], "opmerkingen": "Rapinovet 10 mg/ml; langzaam IV toedienen" }
+          },
+          "waarschuwingen": ["Apneu bij snelle toediening – langzaam titreren", "Ademhalingsondersteuning beschikbaar houden", "Gebruik zo snel mogelijk na openen flacon (geen conserveermiddel in veterinaire formuleringen)", "Lipemie bij langdurig gebruik"],
+          "bronnen": ["Fidin", "Vetcompendium"]
+        },
+        "kat": {
+          "dosis": { "min": 4, "max": 8, "eenheid": "mg/kg", "frequentie": "eenmalig", "opmerkingen": "Katten metaboliseren propofol langzamer (glucuronidatiedefect) – hogere doses en langzamere recovery" },
+          "toediening": {
+            "injectie": { "concentratie": 10, "eenheid": "mg/ml", "routes": ["IV"], "opmerkingen": "Langzaam titreren; max 2 achtereenvolgende dagen" }
+          },
+          "waarschuwingen": ["Katten metaboliseren propofol via glucuronidatie – bij herhaald gebruik oxidatieve bijwerkingen mogelijk", "Niet meer dan 2 opeenvolgende dagen als TIVA bij katten", "Heinz-lichaamjesanemie bij langdurig gebruik"],
+          "toxiciteit": "Oxidatieve beschadiging bij herhaald gebruik bij katten",
+          "bronnen": ["Fidin", "Vetcompendium"]
+        }
+      }
+    },
+    {
+      "id": "clindamycine",
+      "naam": "Clindamycine",
+      "werkzameStof": "Clindamycine",
+      "merknamen": ["Antirobe", "Clindaseptin", "Clindamycin"],
+      "categorie": "antibioticum",
+      "beschrijving": "Lincosamide antibioticum; actief tegen grampositive bacteriën en anaëroben; uitstekend voor tandinfecties en botinfecties",
+      "soorten": {
+        "hond": {
+          "dosis": { "min": 5.5, "max": 11, "eenheid": "mg/kg", "frequentie": "2x daags", "opmerkingen": "q12h PO; tandinfecties: 5.5-11 mg/kg q12h; huid/bot: 11 mg/kg q12h; 7-28 dagen afhankelijk van indicatie" },
+          "toediening": {
+            "oraal": { "type": "capsule/tablet", "tabletGrootten": [25, 75, 150, 300], "eenheid": "mg", "opmerkingen": "Antirobe capsules" }
+          },
+          "waarschuwingen": ["Niet bij lincosamide-allergie", "Misselijkheid en braken mogelijk – met voedsel geven", "Colitis mogelijk bij langdurig gebruik"],
+          "bronnen": ["Fidin", "Vetcompendium"]
+        },
+        "kat": {
+          "dosis": { "min": 5.5, "max": 11, "eenheid": "mg/kg", "frequentie": "2x daags", "opmerkingen": "q12h PO; effectief bij tandinfecties en toxoplasmose" },
+          "toediening": {
+            "oraal": { "type": "capsule/tablet", "tabletGrootten": [25, 75, 150], "eenheid": "mg", "opmerkingen": "" }
+          },
+          "waarschuwingen": ["Niet bij lincosamide-allergie", "Misselijkheid mogelijk"],
+          "bronnen": ["Fidin", "Vetcompendium"]
+        },
+        "konijn": {
+          "dosis": { "min": 0, "max": 0, "eenheid": "mg/kg", "frequentie": "NIET TOEPASSEN", "opmerkingen": "ABSOLUTE CONTRA-INDICATIE bij konijnen" },
+          "toediening": {},
+          "waarschuwingen": ["ABSOLUTE CONTRA-INDICATIE: Clindamycine veroorzaakt FATALE enterotoxaemie bij konijnen!", "Lincosamides (clindamycine, lincomycine) zijn levensgevaarlijk bij konijnen"],
+          "toxiciteit": "FATAAL bij konijnen – absolute contra-indicatie",
+          "contra_indicaties": ["Konijnen – nooit toedienen"],
+          "bronnen": ["KNMVD Formularium Konijn 2022"]
+        }
+      }
+    },
+    {
+      "id": "cefalexine",
+      "naam": "Cefalexine",
+      "werkzameStof": "Cefalexine",
+      "merknamen": ["Rilexine", "Ceporex", "Cephacare"],
+      "categorie": "antibioticum",
+      "beschrijving": "Eerste generatie cefalosporine; actief tegen grampositive bacteriën en sommige gramnegatieven; goed voor huid- en wondinfecties",
+      "soorten": {
+        "hond": {
+          "dosis": { "min": 10, "max": 30, "eenheid": "mg/kg", "frequentie": "2-3x daags", "opmerkingen": "q8-12h PO; huidinfecties: 10-15 mg/kg q12h; urineweginfecties: 15-30 mg/kg q12h; pyodermie: 22-30 mg/kg q12h; 3-6 weken bij diepe pyodermie" },
+          "toediening": {
+            "oraal": { "type": "tablet", "tabletGrootten": [75, 250, 500, 1000], "eenheid": "mg", "opmerkingen": "Rilexine 75/300/600 mg tabletten" }
+          },
+          "waarschuwingen": ["Niet bij cefalosporine/penicilline-allergie (kruisreactiviteit mogelijk)", "Volledig kuur afmaken – pyodermie minstens 3 weken"],
+          "contra_indicaties": ["Cefalosporine-allergie"],
+          "bronnen": ["Fidin", "Vetcompendium"]
+        },
+        "kat": {
+          "dosis": { "min": 10, "max": 15, "eenheid": "mg/kg", "frequentie": "2x daags", "opmerkingen": "q12h PO; 7-14 dagen" },
+          "toediening": {
+            "oraal": { "type": "tablet", "tabletGrootten": [75, 250], "eenheid": "mg", "opmerkingen": "" }
+          },
+          "waarschuwingen": ["Niet bij cefalosporine-allergie"],
+          "bronnen": ["Fidin", "Vetcompendium"]
+        }
+      }
+    },
+    {
+      "id": "gabapentine",
+      "naam": "Gabapentine",
+      "werkzameStof": "Gabapentine",
+      "merknamen": ["Neurontin", "Gabapentine"],
+      "categorie": "analgeticum",
+      "beschrijving": "Anticonvulsivum en neuropathisch analgeticum; ook gebruikt als anxiolyticum (angst bij katten)",
+      "soorten": {
+        "hond": {
+          "dosis": { "min": 5, "max": 10, "eenheid": "mg/kg", "frequentie": "2-3x daags", "opmerkingen": "q8-12h PO; neuropathische pijn: 5-10 mg/kg q8-12h; kan worden opgehoogd tot 20 mg/kg q8h" },
+          "toediening": {
+            "oraal": { "type": "capsule/tablet", "tabletGrootten": [100, 300, 400], "eenheid": "mg", "opmerkingen": "Geleidelijk ophogen en afbouwen – abrupte stop verhoogt insultenrisico" }
+          },
+          "waarschuwingen": ["Sedatie en ataxie bij start behandeling – geleidelijk ophogen", "Nooit abrupt stoppen (insulten risico)", "Dosisaanpassing bij nierproblemen"],
+          "bronnen": ["Fidin", "Vetcompendium"]
+        },
+        "kat": {
+          "dosis": { "min": 5, "max": 10, "eenheid": "mg/kg", "frequentie": "1-2x daags", "opmerkingen": "q12h PO; bij angst voor dierenartsconsult: eenmalig 50-100 mg/kat 1-2 uur van tevoren (sedatieve dosis)" },
+          "toediening": {
+            "oraal": { "type": "capsule", "tabletGrootten": [100], "eenheid": "mg", "opmerkingen": "100 mg capsule; bij kleine katten inhoud verdunnen" }
+          },
+          "waarschuwingen": ["Sedatie normaal, met name bij eerste gebruik", "Xylitol-vrij product gebruiken (sommige humane syrups bevatten xylitol – TOXISCH bij katten/honden)"],
+          "toxiciteit": "Opgepast: xylitol in humane vloeistofformuleringen is toxisch voor katten/honden",
+          "bronnen": ["Fidin", "Vetcompendium"]
+        }
+      }
+    },
+    {
+      "id": "fenobarbital",
+      "naam": "Fenobarbital",
+      "werkzameStof": "Fenobarbital",
+      "merknamen": ["Phenoleptil", "Solfoton", "Luminal vet"],
+      "categorie": "analgeticum",
+      "beschrijving": "Barbituraat anti-epilepticum; eerste keuze middel bij epilepsie bij hond en kat",
+      "soorten": {
+        "hond": {
+          "dosis": { "min": 2, "max": 4, "eenheid": "mg/kg", "frequentie": "2x daags", "opmerkingen": "Start 2-3 mg/kg q12h PO; serumbloedspiegels na 2 weken meten (streef: 20-45 μg/ml); ophogen indien nodig" },
+          "toediening": {
+            "oraal": { "type": "tablet", "tabletGrootten": [15, 30, 50, 100], "eenheid": "mg", "opmerkingen": "Phenoleptil tabletten" },
+            "injectie": { "concentratie": 200, "eenheid": "mg/ml", "routes": ["IV", "IM"], "opmerkingen": "Status epilepticus: langzame IV toediening" }
+          },
+          "waarschuwingen": ["Gecontroleerde stof", "Levertoxiciteit bij langdurig gebruik – leverwaarden elke 6 maanden controleren", "Inductie van leverenzymen – beïnvloedt metabolisme andere geneesmiddelen", "Bloedspiegels monitoren", "NOOIT abrupt stoppen – geleidelijk afbouwen"],
+          "contra_indicaties": ["Leverziekte"],
+          "bronnen": ["Fidin", "Vetcompendium"]
+        },
+        "kat": {
+          "dosis": { "min": 2, "max": 4, "eenheid": "mg/kg", "frequentie": "2x daags", "opmerkingen": "q12h PO; katten metaboliseren fenobarbital langzamer – laagste effectieve dosis gebruiken" },
+          "toediening": {
+            "oraal": { "type": "tablet", "tabletGrootten": [15, 30], "eenheid": "mg", "opmerkingen": "" }
+          },
+          "waarschuwingen": ["Gecontroleerde stof", "Leverwaarden en bloedspiegels monitoren", "Langzamere metabolisering bij katten – voorzichtig doseren"],
+          "bronnen": ["Fidin", "Vetcompendium"]
+        }
+      }
+    },
+    {
+      "id": "omeprazol",
+      "naam": "Omeprazol",
+      "werkzameStof": "Omeprazol",
+      "merknamen": ["Gastrozol", "Pepsigard", "GastroGard (paard)", "Ulcergard (paard)"],
+      "categorie": "antiemeticum",
+      "beschrijving": "Protonpompremmer (PPI); behandeling en preventie van maagzweren; effectief bij NSAID-gerelateerde maagschade",
+      "soorten": {
+        "hond": {
+          "dosis": { "min": 0.7, "max": 1, "eenheid": "mg/kg", "frequentie": "1x daags", "opmerkingen": "q24h PO nuchter of bij voedsel; 4-8 weken kuur; preventief bij NSAID gebruik" },
+          "toediening": {
+            "oraal": { "type": "capsule", "tabletGrootten": [10, 20, 40], "eenheid": "mg", "opmerkingen": "Gastrozol 10/20 mg; niet pletten – enterisch gecoate capsule" }
+          },
+          "waarschuwingen": ["Capsule niet openen of pletten (maagsapresistente coating)", "Pas effect na 2-4 dagen – niet voor acute pijn", "Kan B12-absorptie verminderen bij langdurig gebruik"],
+          "bronnen": ["Fidin", "Vetcompendium"]
+        },
+        "kat": {
+          "dosis": { "min": 0.7, "max": 1, "eenheid": "mg/kg", "frequentie": "1x daags", "opmerkingen": "q24h PO; 4-8 weken" },
+          "toediening": {
+            "oraal": { "type": "capsule", "tabletGrootten": [10, 20], "eenheid": "mg", "opmerkingen": "Niet openen of pletten" }
+          },
+          "waarschuwingen": ["Capsule niet pletten"],
+          "bronnen": ["Fidin", "Vetcompendium"]
+        },
+        "konijn": {
+          "dosis": { "min": 0.5, "max": 1, "eenheid": "mg/kg", "frequentie": "1x daags", "opmerkingen": "0.5-1 mg/kg q24h PO; maagulcus preventie perioperatief" },
+          "toediening": {
+            "oraal": { "type": "capsule", "tabletGrootten": [10], "eenheid": "mg", "opmerkingen": "Inhoud capsule kan worden verdund in water" }
+          },
+          "waarschuwingen": ["Off-label gebruik"],
+          "bronnen": ["KNMVD Formularium Konijn 2022"]
+        },
+        "paard": {
+          "dosis": { "min": 4, "max": 4, "eenheid": "mg/kg", "frequentie": "1x daags", "opmerkingen": "GastroGard pasta 4 mg/kg q24h x 28 dagen behandeling; preventie 1-2 mg/kg q24h" },
+          "toediening": {
+            "oraal": { "type": "pasta", "concentratie": 370, "eenheid": "mg/dosering", "opmerkingen": "GastroGard: 1 spuit = 370 mg omeprazol = 1 paard van 600 kg behandeling (4 mg/kg)" }
+          },
+          "waarschuwingen": ["Behandeling minstens 28 dagen bij actieve EGUS (equine gastric ulcer syndrome)", "Preventief: halve dosis; endoscopische controle aanbevolen"],
+          "bronnen": ["Fidin", "Vetcompendium"]
+        }
+      }
+    },
+    {
+      "id": "selamectine",
+      "naam": "Selamectine",
+      "werkzameStof": "Selamectine",
+      "merknamen": ["Revolution", "Stronghold"],
+      "categorie": "antiparasitair",
+      "beschrijving": "Macrocyclisch lactone spot-on; actief tegen vlooien, hartworm, oormijten, Sarcoptes, sommige nematoden",
+      "soorten": {
+        "hond": {
+          "dosis": { "min": 6, "max": 12, "eenheid": "mg/kg", "frequentie": "1x per maand", "opmerkingen": "Spot-on maandelijks; veilig bij MDR1-positieve rassen (tegenstelling tot ivermectine)" },
+          "toediening": {
+            "oraal": { "type": "spot-on", "eenheid": "mg/pipet", "opmerkingen": "Revolution pipetten: 15/30/60/120/240 mg voor diverse gewichtsklassen" }
+          },
+          "waarschuwingen": ["Veilig bij MDR1/ABCB1-mutatie dragers (Collies etc.) – geen MDR1-risico", "Niet in ogen of open wonden", "72 uur na toediening niet nat maken"],
+          "bronnen": ["Vetcompendium", "Fidin"]
+        },
+        "kat": {
+          "dosis": { "min": 6, "max": 12, "eenheid": "mg/kg", "frequentie": "1x per maand", "opmerkingen": "Spot-on; effectief bij Otodectes (oormijten), vlooien en hartworm preventie" },
+          "toediening": {
+            "oraal": { "type": "spot-on", "eenheid": "mg/pipet", "opmerkingen": "Stronghold pipetten: 15/45/60 mg" }
+          },
+          "waarschuwingen": ["Niet in ogen of op beschadigde huid", "72 uur droog houden na toediening"],
+          "bronnen": ["Vetcompendium", "Fidin"]
+        }
+      }
+    },
+    {
+      "id": "oxytocine",
+      "naam": "Oxytocine",
+      "werkzameStof": "Oxytocine",
+      "merknamen": ["Oxytocin", "Syntocinon vet", "Oxytocine Alfasan"],
+      "categorie": "hartmedicatie",
+      "beschrijving": "Neuropeptidehormoon; stimuleert uteruscontracties en melkafgifte; gebruikt bij partus en uterusatonie",
+      "soorten": {
+        "hond": {
+          "dosis": { "min": 0.5, "max": 3, "eenheid": "IU/dier", "frequentie": "herhalen na 30 min indien nodig", "opmerkingen": "0.5-3 IU IV/IM; uterusatonie: laag starten en ophogen" },
+          "toediening": {
+            "injectie": { "concentratie": 10, "eenheid": "IU/ml", "routes": ["IV", "IM", "SC"], "opmerkingen": "10 IU/ml; IV voorkeur bij acute uterusatonie" }
+          },
+          "waarschuwingen": ["Niet gebruiken als cervix niet ontsloten is – risico op uterusruptuur", "Foetale nood bij te krachtige uteruscontracties"],
+          "contra_indicaties": ["Gesloten cervix", "Feto-pelviene disproportie"],
+          "bronnen": ["Fidin", "Vetcompendium"]
+        },
+        "kat": {
+          "dosis": { "min": 0.5, "max": 2, "eenheid": "IU/dier", "frequentie": "herhalen na 30 min indien nodig", "opmerkingen": "0.5-2 IU IV/IM" },
+          "toediening": {
+            "injectie": { "concentratie": 10, "eenheid": "IU/ml", "routes": ["IV", "IM"], "opmerkingen": "" }
+          },
+          "waarschuwingen": ["Niet bij gesloten cervix", "Foetale nood risico"],
+          "contra_indicaties": ["Gesloten cervix"],
+          "bronnen": ["Fidin", "Vetcompendium"]
+        },
+        "koe": {
+          "dosis": { "min": 10, "max": 40, "eenheid": "IU/dier", "frequentie": "eenmalig of herhalen", "opmerkingen": "Melkafgifte: 10-20 IU IV/IM; uterusatonie/partus stimulatie: 20-40 IU IM" },
+          "toediening": {
+            "injectie": { "concentratie": 10, "eenheid": "IU/ml", "routes": ["IV", "IM"], "opmerkingen": "" }
+          },
+          "waarschuwingen": ["Niet bij disproportie kalf/bekken", "Bewaken foetale nood bij contractiestimulatie"],
+          "bronnen": ["Fidin", "Vetcompendium"]
+        },
+        "paard": {
+          "dosis": { "min": 10, "max": 20, "eenheid": "IU/dier", "frequentie": "eenmalig", "opmerkingen": "Melkafgifte/nageboorte: 10-20 IU IV/IM; hogere doses bij retentio secundinarum" },
+          "toediening": {
+            "injectie": { "concentratie": 10, "eenheid": "IU/ml", "routes": ["IV", "IM"], "opmerkingen": "" }
+          },
+          "waarschuwingen": ["Voorzichtig bij overdosering – ernstige koliekpijnen", "Sweating en onrust mogelijk"],
+          "bronnen": ["Fidin"]
+        },
+        "varken": {
+          "dosis": { "min": 10, "max": 20, "eenheid": "IU/dier", "frequentie": "eenmalig of 2x daags", "opmerkingen": "Partus ondersteuning/MMA-syndroom: 10-20 IU IM" },
+          "toediening": {
+            "injectie": { "concentratie": 10, "eenheid": "IU/ml", "routes": ["IM"], "opmerkingen": "" }
+          },
+          "waarschuwingen": ["Niet bij gesloten cervix"],
+          "bronnen": ["Fidin"]
+        },
+        "schaap": {
+          "dosis": { "min": 5, "max": 10, "eenheid": "IU/dier", "frequentie": "eenmalig", "opmerkingen": "Melkafgifte/uteruscontractie: 5-10 IU IM" },
+          "toediening": {
+            "injectie": { "concentratie": 10, "eenheid": "IU/ml", "routes": ["IM", "IV"], "opmerkingen": "" }
+          },
+          "waarschuwingen": ["Niet bij gesloten cervix"],
+          "bronnen": ["Fidin"]
+        }
+      }
+    },
+    {
+      "id": "atropine",
+      "naam": "Atropine",
+      "werkzameStof": "Atropinesulfaat",
+      "merknamen": ["Atropine", "Atropinesulfaat Alfasan"],
+      "categorie": "sedativum",
+      "beschrijving": "Parasympathicolyticum (anticholinergicum); premedicatie, bradycardie-behandeling, antidotum bij organofosaatvergiftiging",
+      "soorten": {
+        "hond": {
+          "dosis": { "min": 0.02, "max": 0.04, "eenheid": "mg/kg", "frequentie": "eenmalig of prn", "opmerkingen": "Premedicatie: 0.02-0.04 mg/kg IM/SC; Bradycardie: 0.02-0.04 mg/kg IV; Organofosaat vergiftiging: 0.1-0.5 mg/kg IV (totdat secreties opdrogen)" },
+          "toediening": {
+            "injectie": { "concentratie": 0.5, "eenheid": "mg/ml", "routes": ["SC", "IM", "IV"], "opmerkingen": "0.5 mg/ml en 1 mg/ml beschikbaar" }
+          },
+          "waarschuwingen": ["Tachycardie na toediening normaal", "Verhoogde speekselviscositeit – mondslijmvliezen bevochtig houden", "Mydriasis, urineretentie en obstipatie als bijwerkingen"],
+          "contra_indicaties": ["Glaucoom", "Urinaire obstructie", "Tachycardie"],
+          "bronnen": ["Fidin", "Vetcompendium"]
+        },
+        "kat": {
+          "dosis": { "min": 0.02, "max": 0.04, "eenheid": "mg/kg", "frequentie": "eenmalig of prn", "opmerkingen": "Premedicatie: 0.02-0.04 mg/kg SC/IM" },
+          "toediening": {
+            "injectie": { "concentratie": 0.5, "eenheid": "mg/ml", "routes": ["SC", "IM", "IV"], "opmerkingen": "" }
+          },
+          "waarschuwingen": ["Tachycardie normaal na toediening"],
+          "bronnen": ["Fidin", "Vetcompendium"]
+        },
+        "konijn": {
+          "dosis": { "min": 0.1, "max": 0.5, "eenheid": "mg/kg", "frequentie": "eenmalig", "opmerkingen": "OPGELET: sommige konijnen bezitten atropinase-enzym en zijn atropine-resistent – soms 10x hogere dosis nodig" },
+          "toediening": {
+            "injectie": { "concentratie": 0.5, "eenheid": "mg/ml", "routes": ["SC", "IM", "IV"], "opmerkingen": "" }
+          },
+          "waarschuwingen": ["Ca. 50% van konijnen is atropineresistent door atropinase-enzym!", "Bij geen effect: glycopyrrolaat als alternatief (niet-enzymatisch afgebroken)"],
+          "toxiciteit": "Atropineresistentie bij ~50% van konijnen",
+          "bronnen": ["KNMVD Formularium Konijn 2022"]
+        },
+        "paard": {
+          "dosis": { "min": 0.01, "max": 0.02, "eenheid": "mg/kg", "frequentie": "eenmalig", "opmerkingen": "Beperkt gebruik; organofosaat vergiftiging: 0.1-0.2 mg/kg IV tot effect" },
+          "toediening": {
+            "injectie": { "concentratie": 0.5, "eenheid": "mg/ml", "routes": ["IV", "IM"], "opmerkingen": "" }
+          },
+          "waarschuwingen": ["Ileus risico bij paarden na atropine!", "Gebruik minimale effectieve dosis"],
+          "toxiciteit": "Ileus risico bij paarden",
+          "bronnen": ["Fidin"]
+        }
+      }
     }
   ]
 }

@@ -151,13 +151,6 @@ input:focus, select:focus {
   white-space: nowrap;
 }
 
-/* === Sources panel === */
-.panel-sources { font-size: .8rem; color: var(--gray-600); }
-.panel-sources h3 { font-size: .8rem; font-weight: 700; color: var(--blue); text-transform: uppercase; letter-spacing: .8px; margin-bottom: .6rem; }
-.sources-list { padding-left: 1.1rem; margin-bottom: .75rem; }
-.sources-list li { margin-bottom: .2rem; }
-.sources-note { font-size: .75rem; line-height: 1.6; }
-.sources-note a { color: var(--blue-mid); }
 
 /* === Content area === */
 .content { flex: 1; min-width: 0; }
@@ -439,6 +432,47 @@ input:focus, select:focus {
 
 .modal-ci { font-size: .85rem; color: var(--red); }
 .modal-sources { font-size: .8rem; color: var(--gray-600); font-style: italic; }
+
+/* === Sources section === */
+.sources-section {
+  background: var(--blue-dark);
+  color: rgba(255,255,255,.85);
+  padding: 2rem 1.5rem 1.5rem;
+  margin-top: 1.5rem;
+}
+.sources-inner {
+  max-width: 1400px;
+  margin: auto;
+}
+.sources-section h3 {
+  font-size: .85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .8px;
+  color: rgba(255,255,255,.5);
+  margin-bottom: 1rem;
+}
+.sources-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: .75rem 1.5rem;
+  margin-bottom: 1.25rem;
+}
+.source-item {
+  font-size: .8rem;
+  line-height: 1.6;
+  color: rgba(255,255,255,.75);
+}
+.source-item strong { color: #fff; display: block; margin-bottom: .1rem; }
+.source-item a { color: #7fb3d3; }
+.source-item a:hover { color: #afd3ee; }
+.sources-disclaimer {
+  font-size: .75rem;
+  color: rgba(255,255,255,.45);
+  border-top: 1px solid rgba(255,255,255,.1);
+  padding-top: .75rem;
+  line-height: 1.6;
+}
 
 /* === Footer === */
 footer {
