@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VetMed Calculator – Veterinaire Medicatiedosering</title>
+  <link rel="stylesheet" href="css/style.css">
+  <meta name="description" content="Veterinaire medicatiecalculator voor doseringen op basis van diersoort en gewicht">
+</head>
+<body>
+
+  <header>
+    <div class="header-inner">
+      <div class="header-brand">
+        <span class="header-icon">🐾</span>
+        <div>
+          <h1>VetMed Calculator</h1>
+          <p>Veterinaire medicatiedosering</p>
+        </div>
+      </div>
+      <div class="header-disclaimer">
+        Hulpmiddel voor dierenartsen — raadpleeg altijd officiële formularia voor definitieve doseringen
+      </div>
+    </div>
+  </header>
+
+  <div class="layout">
+
+    <aside class="sidebar">
+      <div class="panel">
+        <h2 class="panel-title">Patiënt gegevens</h2>
+
+        <div class="form-group">
+          <label for="species">Diersoort</label>
+          <select id="species">
+            <option value="">— selecteer diersoort —</option>
+            <optgroup label="Gezelschapsdieren">
+              <option value="hond">🐕 Hond</option>
+              <option value="kat">🐈 Kat</option>
+              <option value="konijn">🐇 Konijn</option>
+              <option value="cavia">🐾 Cavia</option>
+            </optgroup>
+            <optgroup label="Vogels">
+              <option value="kanarie">🐦 Kanarie</option>
+              <option value="duif">🕊️ Duif</option>
+              <option value="kip">🐓 Kip</option>
+            </optgroup>
+            <optgroup label="Landbouwdieren">
+              <option value="koe">🐄 Koe</option>
+              <option value="paard">🐴 Paard</option>
+              <option value="varken">🐷 Varken</option>
+              <option value="schaap">🐑 Schaap</option>
+            </optgroup>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="weight">Gewicht (kg)</label>
+          <div class="input-row">
+            <input type="number" id="weight" placeholder="0.00" min="0.001" step="0.001">
+            <span class="input-unit">kg</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="age">Leeftijd <span class="optional">(optioneel)</span></label>
+          <input type="text" id="age" placeholder="bijv. 3 jaar of 6 maanden">
+        </div>
+
+        <div class="divider"></div>
+
+        <h2 class="panel-title">Filteren</h2>
+
+        <div class="form-group">
+          <label for="category">Categorie</label>
+          <select id="category">
+            <option value="">Alle categorieën</option>
+            <option value="antibioticum">Antibioticum</option>
+            <option value="pijnstiller">Pijnstiller / NSAID</option>
+            <option value="analgeticum">Analgeticum (opiaat)</option>
+            <option value="corticosteroïd">Corticosteroïd</option>
+            <option value="antiemeticum">Anti-emeticum</option>
+            <option value="diureticum">Diureticum</option>
+            <option value="hartmedicatie">Hartmedicatie</option>
+            <option value="antiparasitair">Antiparasitair</option>
+            <option value="sedativum">Sedativum / Premedicatie</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="search">Zoeken</label>
+          <input type="text" id="search" placeholder="naam, werkzame stof, merknaam…">
+        </div>
+      </div>
+
+      <div class="panel panel-sources">
+        <h3>Bronnen</h3>
+        <ul class="sources-list">
+          <li>KNMVD Formularium Konijn (2022)</li>
+          <li>Fidin Veterinair Formularium</li>
+          <li>Vetcompendium</li>
+          <li>Carpenter – Exotic Animal Formulary, 5th Ed.</li>
+          <li>Norbrook Veterinary Products</li>
+          <li>Univ. Utrecht Vet. Pharmacology</li>
+        </ul>
+        <p class="sources-note">
+          Officiële links:<br>
+          <a href="https://www.knmvd.nl/app/uploads/sites/4/2025/09/220628-formularium-konijn-versie-2022-NB.pdf" target="_blank" rel="noopener">KNMVD Konijn PDF</a><br>
+          <a href="https://libguides.library.uu.nl/c.php?g=275959&p=2420133" target="_blank" rel="noopener">UU Vet. Pharmacology</a>
+        </p>
+      </div>
+    </aside>
+
+    <main class="content" id="content">
+      <div id="empty-state" class="empty-state">
+        <div class="empty-icon">🔍</div>
+        <h2>Selecteer een diersoort en vul het gewicht in</h2>
+        <p>De calculator berekent automatisch de doseringen per medicatie op basis van de opgegeven patiëntgegevens.</p>
+        <p class="empty-hint">Tip: gebruik de categoriefilter of zoekfunctie om de lijst te beperken.</p>
+      </div>
+
+      <div id="results-wrapper" class="hidden">
+        <div id="results-header" class="results-header">
+          <div>
+            <h2 id="results-title">Medicaties</h2>
+            <div id="patient-info" class="patient-info"></div>
+          </div>
+          <span id="results-count" class="results-count"></span>
+        </div>
+
+        <div id="alert-zone"></div>
+
+        <div id="medication-grid" class="medication-grid"></div>
+      </div>
+    </main>
+  </div>
+
+  <footer>
+    <div class="footer-inner">
+      <strong>VetMed Calculator</strong> — Uitsluitend bedoeld als hulpmiddel voor dierenartsen.
+      Controleer altijd de actuele bijsluiter, het Vetcompendium of Fidin voor definitieve doseeraanbevelingen.
+      <span class="footer-version">Versie 1.0 · mei 2026</span>
+    </div>
+  </footer>
+
+  <div id="modal-overlay" class="modal-overlay hidden" role="dialog" aria-modal="true">
+    <div class="modal" id="modal-box">
+      <button class="modal-close" id="modal-close" aria-label="Sluiten">✕</button>
+      <div id="modal-content"></div>
+    </div>
+  </div>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
