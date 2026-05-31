@@ -2066,6 +2066,128 @@
           "bronnen": ["KNMVD Formularium Konijn 2022"]
         }
       }
+    },
+    {
+      "id": "firocoxib",
+      "naam": "Firocoxib",
+      "werkzameStof": "Firocoxib",
+      "merknamen": ["Previcox"],
+      "categorie": "pijnstiller",
+      "beschrijving": "COX-2 selectieve NSAID; pijn en ontsteking bij osteoartritis en postoperatief bij honden; geregistreerd in EU",
+      "soorten": {
+        "hond": {
+          "dosis": { "min": 5, "max": 5, "eenheid": "mg/kg", "frequentie": "1x daags", "opmerkingen": "5 mg/kg q24h PO met of zonder voedsel; Previcox 57 mg (<10 kg) en 227 mg (>10 kg) tabletten" },
+          "toediening": {
+            "oraal": { "type": "tablet", "tabletGrootten": [57, 227], "eenheid": "mg", "opmerkingen": "Previcox 57 mg (honden 3-10 kg) en 227 mg (honden >10 kg); smaakvolle tabletten" }
+          },
+          "waarschuwingen": ["Niet combineren met andere NSAIDs of corticosteroïden", "Nierfunctie en leverfunctie monitoren bij langdurig gebruik", "Niet bij drachtige, zogende teefjes of pups <10 weken", "Verhoog wateropname monitoren"],
+          "contra_indicaties": ["Nierfalen", "Leverziekte", "Maagulcera", "Pups <10 weken", "Dracht/lactatie"],
+          "bronnen": ["EMA/CBG-MEB (Previcox)", "Fidin", "Vetcompendium"]
+        }
+      }
+    },
+    {
+      "id": "robenacoxib",
+      "naam": "Robenacoxib",
+      "werkzameStof": "Robenacoxib",
+      "merknamen": ["Onsior"],
+      "categorie": "pijnstiller",
+      "beschrijving": "COX-2 selectieve NSAID; pijn en ontsteking bij hond en kat; geregistreerd in EU; korte weefselretentietijd (gunstig bij katten)",
+      "soorten": {
+        "hond": {
+          "dosis": { "min": 1, "max": 2, "eenheid": "mg/kg", "frequentie": "1x daags", "opmerkingen": "1-2 mg/kg q24h PO nuchter (1 uur voor voeding); max 28 dagen oraal" },
+          "toediening": {
+            "oraal": { "type": "tablet", "tabletGrootten": [10, 20, 40, 80], "eenheid": "mg", "opmerkingen": "Onsior 10/20/40/80 mg tabletten" },
+            "injectie": { "concentratie": 20, "eenheid": "mg/ml", "routes": ["SC"], "opmerkingen": "Onsior 20 mg/ml injectie; eenmalig preoperatief" }
+          },
+          "waarschuwingen": ["Niet combineren met andere NSAIDs of steroïden", "Nierfunctie monitoren", "Nuchter toedienen voor maximale absorptie"],
+          "contra_indicaties": ["Nierfalen", "Leverziekte", "Dehydratie"],
+          "bronnen": ["EMA/CBG-MEB (Onsior)", "Fidin", "Vetcompendium"]
+        },
+        "kat": {
+          "dosis": { "min": 1, "max": 2.4, "eenheid": "mg/kg", "frequentie": "1x daags (max 6 dagen oraal)", "opmerkingen": "PO: 1-2.4 mg/kg q24h nuchter; max 6 opeenvolgende dagen oraal; SC: eenmalig 2 mg/kg perioperatief" },
+          "toediening": {
+            "oraal": { "type": "tablet", "tabletGrootten": [6], "eenheid": "mg", "opmerkingen": "Onsior 6 mg tabletten voor katten" },
+            "injectie": { "concentratie": 20, "eenheid": "mg/ml", "routes": ["SC"], "opmerkingen": "Eenmalig perioperatief" }
+          },
+          "waarschuwingen": ["Maximaal 6 dagen aaneengesloten oraal gebruik bij katten", "Gunstig profiel door korte weefselretentie – minder accumulatie dan andere NSAIDs", "Toch voorzichtig bij nierproblemen"],
+          "contra_indicaties": ["Nierfalen", "Leverziekte", "Dehydratie"],
+          "bronnen": ["EMA/CBG-MEB (Onsior)", "Fidin", "Vetcompendium"]
+        }
+      }
+    },
+    {
+      "id": "mavacoxib",
+      "naam": "Mavacoxib",
+      "werkzameStof": "Mavacoxib",
+      "merknamen": ["Trocoxil"],
+      "categorie": "pijnstiller",
+      "beschrijving": "COX-2 selectieve NSAID met extreem lange halfwaardetijd; maandelijkse dosering; geregistreerd in EU voor chronische osteoartritis bij honden",
+      "soorten": {
+        "hond": {
+          "dosis": { "min": 2, "max": 2, "eenheid": "mg/kg", "frequentie": "1x per maand (na 2 startdoses)", "opmerkingen": "Startschema: dag 1 en dag 14, daarna 1x per maand; max 6.5 maanden totaalbehandeling; met voedsel geven" },
+          "toediening": {
+            "oraal": { "type": "tablet", "tabletGrootten": [6, 20, 30, 75, 95], "eenheid": "mg", "opmerkingen": "Trocoxil tabletten 6/20/30/75/95 mg; smaakvolle tabletten" }
+          },
+          "waarschuwingen": ["LANGWERKEND: halfwaardetijd 17-39 dagen – bijwerkingen zijn moeilijk omkeerbaar!", "NIET gebruiken bij honden met nierproblemen, leveraandoeningen of maagdarmproblemen", "NIET bij drachtige/zogende teefjes", "NIET bij honden <12 maanden of <5 kg", "Bloedonderzoek (lever, nier) vóór start en elke 6 maanden", "Max 7 maanden totaal per jaar – verplichte behandelpauze"],
+          "toxiciteit": "LANGDURIGE bijwerkingen door lange halfwaardetijd – voorzichtigheid geboden",
+          "contra_indicaties": ["Nierfalen", "Leverziekte", "Maagulcera", "Pups <12 maanden", "<5 kg lichaamsgewicht", "Dracht/lactatie"],
+          "bronnen": ["EMA/CBG-MEB (Trocoxil)", "Fidin", "Vetcompendium"]
+        }
+      }
+    },
+    {
+      "id": "ketoprofen",
+      "naam": "Ketoprofen",
+      "werkzameStof": "Ketoprofen",
+      "merknamen": ["Ketofen", "Ketoprofen Alfasan"],
+      "categorie": "pijnstiller",
+      "beschrijving": "Niet-selectieve NSAID; pijn, ontsteking en koorts; geregistreerd in EU voor hond, kat, koe, varken en paard",
+      "soorten": {
+        "hond": {
+          "dosis": { "min": 1, "max": 2, "eenheid": "mg/kg", "frequentie": "1x daags (max 5 dagen)", "opmerkingen": "1-2 mg/kg q24h PO/SC; eerste dag eventueel 2 mg/kg; max 5 opeenvolgende dagen" },
+          "toediening": {
+            "oraal": { "type": "tablet", "tabletGrootten": [5, 10, 20], "eenheid": "mg", "opmerkingen": "Ketofen tabletten" },
+            "injectie": { "concentratie": 10, "eenheid": "mg/ml", "routes": ["SC", "IV"], "opmerkingen": "Ketofen 1% (10 mg/ml)" }
+          },
+          "waarschuwingen": ["Niet meer dan 5 dagen aaneengesloten", "Niet combineren met andere NSAIDs of steroïden", "Voorzichtig bij nierproblemen"],
+          "contra_indicaties": ["Nierfalen", "Maagulcera", "Bloedingsstoornissen"],
+          "bronnen": ["EMA/CBG-MEB (Ketofen)", "Fidin", "Vetcompendium"]
+        },
+        "kat": {
+          "dosis": { "min": 1, "max": 1, "eenheid": "mg/kg", "frequentie": "1x daags (max 5 dagen)", "opmerkingen": "1 mg/kg q24h SC/PO; voorzichtigheid bij katten – korte kuurmaxima" },
+          "toediening": {
+            "oraal": { "type": "tablet", "tabletGrootten": [5], "eenheid": "mg", "opmerkingen": "" },
+            "injectie": { "concentratie": 10, "eenheid": "mg/ml", "routes": ["SC"], "opmerkingen": "" }
+          },
+          "waarschuwingen": ["Max 5 dagen bij katten", "NSAIDs voorzichtig bij katten – zie ook meloxicam-waarschuwingen"],
+          "bronnen": ["EMA/CBG-MEB (Ketofen)", "Fidin", "Vetcompendium"]
+        },
+        "koe": {
+          "dosis": { "min": 3, "max": 3, "eenheid": "mg/kg", "frequentie": "1x daags (max 3 dagen)", "opmerkingen": "3 mg/kg IV/IM; wachttijd vlees 4 dagen, melk 24 uur" },
+          "toediening": {
+            "injectie": { "concentratie": 100, "eenheid": "mg/ml", "routes": ["IV", "IM"], "opmerkingen": "Ketofen 10% (100 mg/ml)" }
+          },
+          "waarschuwingen": ["Wachttijd vlees: 4 dagen", "Wachttijd melk: 24 uur"],
+          "bronnen": ["EMA/CBG-MEB (Ketofen)", "Fidin"]
+        },
+        "paard": {
+          "dosis": { "min": 2.2, "max": 2.2, "eenheid": "mg/kg", "frequentie": "1x daags (max 5 dagen)", "opmerkingen": "2.2 mg/kg IV/IM q24h; wachttijd vlees 4 dagen" },
+          "toediening": {
+            "injectie": { "concentratie": 100, "eenheid": "mg/ml", "routes": ["IV", "IM"], "opmerkingen": "" }
+          },
+          "waarschuwingen": ["Wachttijd vlees: 4 dagen", "Niet langer dan 5 dagen"],
+          "bronnen": ["EMA/CBG-MEB (Ketofen)", "Fidin"]
+        },
+        "varken": {
+          "dosis": { "min": 3, "max": 3, "eenheid": "mg/kg", "frequentie": "1x daags (max 3 dagen)", "opmerkingen": "Wachttijd vlees 4 dagen" },
+          "toediening": {
+            "injectie": { "concentratie": 100, "eenheid": "mg/ml", "routes": ["IM"], "opmerkingen": "" }
+          },
+          "waarschuwingen": ["Wachttijd vlees: 4 dagen"],
+          "bronnen": ["Fidin"]
+        }
+      }
     }
   ]
 }

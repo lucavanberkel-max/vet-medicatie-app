@@ -59,7 +59,7 @@ function renderResults() {
     if (!med.soorten[species]) return false;
     if (category && med.categorie !== category) return false;
     if (search) {
-      const haystack = [med.naam, med.werkzameStof, ...(med.merknamen || [])].join(' ').toLowerCase();
+      const haystack = [med.naam, med.werkzameStof, med.beschrijving, ...(med.merknamen || [])].join(' ').toLowerCase();
       if (!haystack.includes(search)) return false;
     }
     return true;
