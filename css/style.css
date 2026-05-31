@@ -343,6 +343,31 @@ input:focus, select:focus {
 }
 .card-detail-btn:hover { text-decoration: underline; }
 
+/* === Species chips (search-only cards) === */
+.species-chips { display: flex; flex-wrap: wrap; gap: .3rem; margin: .5rem 0 .4rem; }
+.species-chip {
+  font-size: .72rem;
+  background: var(--blue-light);
+  color: var(--blue);
+  padding: .2rem .5rem;
+  border-radius: 20px;
+  font-weight: 500;
+}
+.card-desc { font-size: .8rem; color: var(--gray-600); margin-bottom: .4rem; line-height: 1.4; }
+.dose-hint { font-size: .75rem; color: var(--gray-400); font-style: italic; margin-top: .35rem; }
+.dose-block-hint { border-style: dashed; }
+
+/* === Modal table header === */
+.detail-table th {
+  font-size: .72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--gray-600);
+  padding: .3rem .4rem;
+  border-bottom: 2px solid var(--gray-200);
+  text-align: left;
+}
+
 /* === No results === */
 .no-results {
   text-align: center;

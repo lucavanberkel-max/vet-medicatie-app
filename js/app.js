@@ -3,6 +3,12 @@
 // ── State ─────────────────────────────────────────────────────────────────────
 let allMedications = [];
 
+const SPECIES_LABELS = {
+  hond: '🐕 Hond', kat: '🐈 Kat', konijn: '🐇 Konijn', cavia: '🐾 Cavia',
+  kanarie: '🐦 Kanarie', duif: '🕊️ Duif', kip: '🐓 Kip',
+  koe: '🐄 Koe', paard: '🐴 Paard', varken: '🐷 Varken', schaap: '🐑 Schaap'
+};
+
 // ── Init ──────────────────────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
   fetch('./data/medications.json')
@@ -23,7 +29,6 @@ function bindEvents() {
   ['species', 'weight', 'age', 'category', 'search'].forEach(id => {
     document.getElementById(id).addEventListener('input', renderResults);
   });
-
   document.getElementById('modal-close').addEventListener('click', closeModal);
   document.getElementById('modal-overlay').addEventListener('click', e => {
     if (e.target === document.getElementById('modal-overlay')) closeModal();
@@ -34,16 +39,20 @@ function bindEvents() {
 // ── Render ────────────────────────────────────────────────────────────────────
 function renderResults() {
   const species  = document.getElementById('species').value;
-  const weightRaw = document.getElementById('weight').value;
-  const weight   = parseFloat(weightRaw);
+  const weight   = parseFloat(document.getElementById('weight').value) || 0;
   const category = document.getElementById('category').value;
   const search   = document.getElementById('search').value.trim().toLowerCase();
   const age      = document.getElementById('age').value.trim();
 
+  const hasSearch  = search.length >= 2;
+  const hasSpecies = !!species;
+  const hasWeight  = weight > 0;
+
   const empty   = document.getElementById('empty-state');
   const wrapper = document.getElementById('results-wrapper');
 
-  if (!species || !weight || weight <= 0) {
+  // Show empty state only when nothing useful is entered
+  if (!hasSearch && !hasSpecies) {
     empty.classList.remove('hidden');
     wrapper.classList.add('hidden');
     return;
@@ -52,13 +61,16 @@ function renderResults() {
   empty.classList.add('hidden');
   wrapper.classList.remove('hidden');
 
-  const speciesLabel = document.getElementById('species').selectedOptions[0].text;
-
   // Filter
   const filtered = allMedications.filter(med => {
-    if (!med.soorten[species]) return false;
+    // Species filter: only apply when a species is selected
+    if (hasSpecies && !med.soorten[species]) return false;
+    // Without species filter: skip meds with zero species entries (shouldn't happen)
+    if (!hasSpecies && Object.keys(med.soorten).length === 0) return false;
+    // Category filter
     if (category && med.categorie !== category) return false;
-    if (search) {
+    // Search filter
+    if (hasSearch) {
       const haystack = [med.naam, med.werkzameStof, med.beschrijving, ...(med.merknamen || [])].join(' ').toLowerCase();
       if (!haystack.includes(search)) return false;
     }
@@ -66,13 +78,27 @@ function renderResults() {
   });
 
   // Header
-  const ageStr = age ? `, ${age}` : '';
-  document.getElementById('results-title').textContent = `Medicaties – ${speciesLabel}`;
-  document.getElementById('patient-info').textContent  = `Gewicht: ${formatNum(weight)} kg${ageStr}`;
-  document.getElementById('results-count').textContent = `${filtered.length} medicatie${filtered.length !== 1 ? 's' : ''}`;
+  let titleText = 'Medicaties';
+  let infoText  = '';
 
-  // Global species alerts
-  renderAlerts(species, filtered);
+  if (hasSpecies && hasWeight) {
+    const speciesLabel = document.getElementById('species').selectedOptions[0].text;
+    titleText = `Medicaties – ${speciesLabel}`;
+    infoText  = `Gewicht: ${formatNum(weight)} kg${age ? ', ' + age : ''}`;
+  } else if (hasSpecies) {
+    titleText = `Medicaties – ${document.getElementById('species').selectedOptions[0].text}`;
+    infoText  = 'Voer gewicht in voor dosisberekening';
+  } else if (hasSearch) {
+    titleText = `Zoekresultaten voor "${escHtml(search)}"`;
+    infoText  = hasSpecies ? '' : 'Selecteer diersoort + gewicht voor dosisberekening';
+  }
+
+  document.getElementById('results-title').textContent  = titleText;
+  document.getElementById('patient-info').textContent   = infoText;
+  document.getElementById('results-count').textContent  = `${filtered.length} medicatie${filtered.length !== 1 ? 's' : ''}`;
+
+  // Alerts only when species is known
+  renderAlerts(hasSpecies ? species : null);
 
   // Cards
   const grid = document.getElementById('medication-grid');
@@ -81,16 +107,16 @@ function renderResults() {
     return;
   }
 
-  grid.innerHTML = filtered.map(med => buildCard(med, species, weight)).join('');
+  grid.innerHTML = filtered.map(med => buildCard(med, hasSpecies ? species : null, hasWeight ? weight : 0)).join('');
 
   grid.querySelectorAll('.card-detail-btn').forEach(btn => {
     btn.addEventListener('click', e => {
       e.stopPropagation();
-      openModal(btn.dataset.id, species, weight);
+      openModal(btn.dataset.id, hasSpecies ? species : null, hasWeight ? weight : 0);
     });
   });
   grid.querySelectorAll('.med-card').forEach(card => {
-    card.addEventListener('click', () => openModal(card.dataset.id, species, weight));
+    card.addEventListener('click', () => openModal(card.dataset.id, hasSpecies ? species : null, hasWeight ? weight : 0));
   });
 }
 
@@ -104,6 +130,7 @@ const SPECIES_ALERTS = {
   ],
   konijn: [
     { level: 'danger',  text: '<strong>Orale penicillines (amoxicilline, amox-clav):</strong> Risico op FATALE cecale dysbiose bij konijnen!' },
+    { level: 'danger',  text: '<strong>Fipronil (Frontline):</strong> LETAAL bij konijnen – nooit toepassen!' },
     { level: 'warning', text: '<strong>Corticosteroïden:</strong> Verhogen sterk het risico op latente infecties (bijv. E. cuniculi reactivatie).' },
     { level: 'warning', text: '<strong>GI-stasis:</strong> Bij verminderde darmmotiliteit altijd vloeistof en prokinetisch middel inzetten.' },
   ],
@@ -112,11 +139,14 @@ const SPECIES_ALERTS = {
   ],
   paard: [
     { level: 'danger',  text: '<strong>Dexamethason:</strong> Laminitisrisico bij paarden – voorzichtig toepassen.' },
+    { level: 'danger',  text: '<strong>Procaïnepenicilline IV:</strong> LETAAL – uitsluitend IM toedienen!' },
+    { level: 'danger',  text: '<strong>Acepromazine IV:</strong> Levensgevaarlijk bij paarden – uitsluitend IM.' },
   ],
 };
 
-function renderAlerts(species, filtered) {
+function renderAlerts(species) {
   const zone = document.getElementById('alert-zone');
+  if (!species) { zone.innerHTML = ''; return; }
   const alerts = SPECIES_ALERTS[species] || [];
   if (!alerts.length) { zone.innerHTML = ''; return; }
   zone.innerHTML = alerts.map(a =>
@@ -129,18 +159,27 @@ function renderAlerts(species, filtered) {
 
 // ── Card builder ──────────────────────────────────────────────────────────────
 function buildCard(med, species, weight) {
+  const brandText = (med.merknamen || []).slice(0, 3).join(', ');
+
+  // When no species: show species availability chips + general info
+  if (!species) {
+    return buildCardNoSpecies(med, brandText);
+  }
+
   const sd = med.soorten[species];
-  const hasDanger  = med.toxiciteit || (sd.waarschuwingen || []).some(w => w.startsWith('GEVAAR') || w.startsWith('CRITIEK') || w.startsWith('LETAAL') || w.startsWith('HOOG RISICO'));
+  const hasDanger  = med.toxiciteit || sd.toxiciteit ||
+    (sd.waarschuwingen || []).some(w =>
+      w.startsWith('GEVAAR') || w.startsWith('CRITIEK') || w.startsWith('LETAAL') ||
+      w.startsWith('HOOG RISICO') || w.startsWith('ABSOLUTE') || w.startsWith('LEVENSGEVAARLIJK'));
   const hasWarning = !hasDanger && (sd.waarschuwingen || []).length > 0;
 
   const cardClass = hasDanger ? 'has-danger' : hasWarning ? 'has-warning' : '';
-  const brandText = (med.merknamen || []).slice(0, 2).join(', ');
 
   let doseSectionHtml = '';
-  if (sd.dosis && weight) {
+  if (sd.dosis && weight > 0 && sd.dosis.min > 0) {
     const dMin = sd.dosis.min * weight;
     const dMax = sd.dosis.max * weight;
-    const showRange = dMin !== dMax;
+    const showRange = Math.abs(dMin - dMax) > 0.001;
     doseSectionHtml = `
       <div class="dose-block">
         <div class="dose-block-title">Dosis voor ${formatNum(weight)} kg</div>
@@ -150,9 +189,23 @@ function buildCard(med, species, weight) {
           <span class="dose-unit">mg</span>
         </div>
         ${buildRouteRows(sd, dMin, dMax)}
-        <div class="freq-row">Frequentie: <span>${sd.dosis.frequentie}</span></div>
+        <div class="freq-row">Frequentie: <span>${escHtml(sd.dosis.frequentie)}</span></div>
         ${sd.dosis.opmerkingen ? `<div class="dose-note">${escHtml(sd.dosis.opmerkingen)}</div>` : ''}
       </div>`;
+  } else if (sd.dosis && weight <= 0) {
+    doseSectionHtml = `
+      <div class="dose-block dose-block-hint">
+        <div class="dose-block-title">Dosering (per kg)</div>
+        <div class="dose-row">
+          <span class="dose-label">Bereik:</span>
+          <span class="dose-value">${sd.dosis.min === sd.dosis.max ? sd.dosis.min : sd.dosis.min + ' – ' + sd.dosis.max}</span>
+          <span class="dose-unit">${escHtml(sd.dosis.eenheid)}</span>
+        </div>
+        <div class="freq-row">Frequentie: <span>${escHtml(sd.dosis.frequentie)}</span></div>
+        <div class="dose-note">Voer gewicht in voor exacte berekening</div>
+      </div>`;
+  } else if (sd.dosis && sd.dosis.min === 0) {
+    doseSectionHtml = `<div class="warn-tag warn-tag-danger" style="margin-bottom:.5rem">NIET TOEPASSEN BIJ DEZE SOORT</div>`;
   }
 
   const warnHtml = buildWarningsShort(sd, hasDanger);
@@ -167,7 +220,7 @@ function buildCard(med, species, weight) {
         <span class="badge badge-${med.categorie}">${ucFirst(med.categorie)}</span>
       </div>
       <div class="card-body">
-        ${hasDanger && med.toxiciteit ? `<div class="warn-tag warn-tag-danger">⚠ ${escHtml(med.toxiciteit)}</div>` : ''}
+        ${hasDanger && (med.toxiciteit || sd.toxiciteit) ? `<div class="warn-tag warn-tag-danger">⚠ ${escHtml(med.toxiciteit || sd.toxiciteit)}</div>` : ''}
         ${doseSectionHtml}
         ${warnHtml}
       </div>
@@ -178,40 +231,66 @@ function buildCard(med, species, weight) {
     </div>`;
 }
 
+function buildCardNoSpecies(med, brandText) {
+  const availableSpecies = Object.keys(med.soorten);
+  const speciesChips = availableSpecies
+    .map(s => `<span class="species-chip">${SPECIES_LABELS[s] || s}</span>`)
+    .join('');
+
+  return `
+    <div class="med-card" data-id="${med.id}" tabindex="0" role="button" aria-label="${med.naam}">
+      <div class="card-header">
+        <div>
+          <div class="card-title">${escHtml(med.naam)}</div>
+          <div class="card-subtitle">${escHtml(med.werkzameStof)}${brandText ? ` · <em>${escHtml(brandText)}</em>` : ''}</div>
+        </div>
+        <span class="badge badge-${med.categorie}">${ucFirst(med.categorie)}</span>
+      </div>
+      <div class="card-body">
+        <p class="card-desc">${escHtml(med.beschrijving || '')}</p>
+        <div class="species-chips">${speciesChips}</div>
+        <div class="dose-hint">Selecteer diersoort + gewicht voor dosisberekening</div>
+      </div>
+      <div class="card-footer">
+        <span class="card-sources">${availableSpecies.length} diersoort${availableSpecies.length !== 1 ? 'en' : ''}</span>
+        <button class="card-detail-btn" data-id="${med.id}">Details →</button>
+      </div>
+    </div>`;
+}
+
 function buildRouteRows(sd, dMin, dMax) {
   const rows = [];
-  if (sd.toediening) {
-    if (sd.toediening.injectie) {
-      const conc = sd.toediening.injectie.concentratie;
-      if (conc) {
-        const vMin = dMin / conc, vMax = dMax / conc;
-        const routes = (sd.toediening.injectie.routes || []).join('/');
-        rows.push(`<div class="dose-row">
-          <span class="dose-label">Injectie (${routes || 'IM/SC'}):</span>
-          <span class="dose-value">${vMin !== vMax ? formatNum(vMin) + ' – ' + formatNum(vMax) : formatNum(vMin)}</span>
-          <span class="dose-unit">ml (${conc} mg/ml)</span>
-        </div>`);
-      }
+  if (!sd.toediening) return '';
+  if (sd.toediening.injectie) {
+    const conc = sd.toediening.injectie.concentratie;
+    if (conc) {
+      const vMin = dMin / conc, vMax = dMax / conc;
+      const routes = (sd.toediening.injectie.routes || []).join('/');
+      rows.push(`<div class="dose-row">
+        <span class="dose-label">Injectie (${routes || 'IM/SC'}):</span>
+        <span class="dose-value">${Math.abs(vMin-vMax) > 0.001 ? formatNum(vMin) + ' – ' + formatNum(vMax) : formatNum(vMin)}</span>
+        <span class="dose-unit">ml (${conc} mg/ml)</span>
+      </div>`);
     }
-    if (sd.toediening.oraal) {
-      const o = sd.toediening.oraal;
-      if (o.type === 'vloeistof' && o.concentratie) {
-        const vMin = dMin / o.concentratie, vMax = dMax / o.concentratie;
-        rows.push(`<div class="dose-row">
-          <span class="dose-label">Oraal:</span>
-          <span class="dose-value">${vMin !== vMax ? formatNum(vMin) + ' – ' + formatNum(vMax) : formatNum(vMin)}</span>
-          <span class="dose-unit">ml (${o.concentratie} mg/ml)</span>
-        </div>`);
-      } else if (o.type === 'tablet' && o.tabletGrootten) {
-        const tabletInfo = o.tabletGrootten.map(t => {
-          const n = dMax / t;
-          return `${formatNum(n)} × ${t}mg tab`;
-        }).join(' | ');
-        rows.push(`<div class="dose-row">
-          <span class="dose-label">Tablet:</span>
-          <span class="dose-value dose-unit" style="font-size:.8rem">${tabletInfo}</span>
-        </div>`);
-      }
+  }
+  if (sd.toediening.oraal) {
+    const o = sd.toediening.oraal;
+    if (o.type === 'vloeistof' && o.concentratie) {
+      const vMin = dMin / o.concentratie, vMax = dMax / o.concentratie;
+      rows.push(`<div class="dose-row">
+        <span class="dose-label">Oraal:</span>
+        <span class="dose-value">${Math.abs(vMin-vMax) > 0.001 ? formatNum(vMin) + ' – ' + formatNum(vMax) : formatNum(vMin)}</span>
+        <span class="dose-unit">ml (${o.concentratie} mg/ml)</span>
+      </div>`);
+    } else if (o.type === 'tablet' && o.tabletGrootten) {
+      const tabletInfo = o.tabletGrootten.map(t => {
+        const n = dMax / t;
+        return `${formatNum(n)} × ${t}mg`;
+      }).join(' | ');
+      rows.push(`<div class="dose-row">
+        <span class="dose-label">Tablet:</span>
+        <span class="dose-value dose-unit" style="font-size:.8rem">${tabletInfo}</span>
+      </div>`);
     }
   }
   return rows.join('');
@@ -221,7 +300,8 @@ function buildWarningsShort(sd, hasDanger) {
   const warnings = (sd.waarschuwingen || []).slice(0, 3);
   if (!warnings.length) return '';
   const items = warnings.map(w => {
-    const isDanger = w.startsWith('GEVAAR') || w.startsWith('CRITIEK') || w.startsWith('LETAAL') || w.startsWith('HOOG RISICO') || w.startsWith('KRITIEK');
+    const isDanger = w.startsWith('GEVAAR') || w.startsWith('CRITIEK') || w.startsWith('LETAAL') ||
+      w.startsWith('HOOG RISICO') || w.startsWith('ABSOLUTE') || w.startsWith('LEVENSGEVAARLIJK') || w.startsWith('KRITIEK');
     return `<li class="${isDanger ? 'danger' : ''}">${escHtml(w)}</li>`;
   }).join('');
   return `<ul class="warn-list">${items}</ul>`;
@@ -231,32 +311,91 @@ function buildWarningsShort(sd, hasDanger) {
 function openModal(id, species, weight) {
   const med = allMedications.find(m => m.id === id);
   if (!med) return;
-  const sd = med.soorten[species];
 
+  // If no species, show overview of all species dosing
+  if (!species) {
+    renderModalOverview(med);
+  } else {
+    renderModalSpecies(med, species, weight);
+  }
+
+  document.getElementById('modal-overlay').classList.remove('hidden');
+  document.getElementById('modal-box').scrollTop = 0;
+}
+
+function renderModalOverview(med) {
+  const brandText = (med.merknamen || []).join(', ');
+  const speciesList = Object.keys(med.soorten);
+
+  const speciesRows = speciesList.map(s => {
+    const sd = med.soorten[s];
+    if (!sd.dosis) return '';
+    const label = SPECIES_LABELS[s] || s;
+    const hasDanger = sd.toxiciteit || (sd.waarschuwingen || []).some(w =>
+      w.startsWith('GEVAAR') || w.startsWith('LETAAL') || w.startsWith('ABSOLUTE') || w.startsWith('CRITIEK'));
+    const doseStr = sd.dosis.min === 0
+      ? '<span style="color:var(--red);font-weight:700">NIET TOEPASSEN</span>'
+      : (sd.dosis.min === sd.dosis.max ? sd.dosis.min : `${sd.dosis.min}–${sd.dosis.max}`) + ` ${sd.dosis.eenheid}`;
+    const warn = hasDanger ? ' <span style="color:var(--red)">⚠</span>' : '';
+    return `<tr><td>${label}${warn}</td><td><strong>${doseStr}</strong></td><td>${escHtml(sd.dosis.frequentie)}</td></tr>`;
+  }).filter(Boolean).join('');
+
+  document.getElementById('modal-content').innerHTML = `
+    <div class="modal-med-name">${escHtml(med.naam)}</div>
+    <div class="modal-werkzame">Werkzame stof: ${escHtml(med.werkzameStof)}</div>
+    ${brandText ? `<div class="modal-merknamen">Merknamen: ${escHtml(brandText)}</div>` : ''}
+    <p style="font-size:.85rem;color:var(--gray-600);margin:.5rem 0 1rem">${escHtml(med.beschrijving || '')}</p>
+    <div class="modal-section">
+      <div class="modal-section-title">Dosering per diersoort</div>
+      <table class="detail-table">
+        <thead><tr><th>Diersoort</th><th>Dosis</th><th>Frequentie</th></tr></thead>
+        <tbody>${speciesRows}</tbody>
+      </table>
+    </div>
+    <p style="font-size:.75rem;color:var(--gray-400);margin-top:1rem">Selecteer een diersoort en vul het gewicht in voor berekende doseringen per kg.</p>`;
+}
+
+function renderModalSpecies(med, species, weight) {
+  const sd = med.soorten[species];
   const speciesLabel = document.getElementById('species').selectedOptions[0].text;
 
   let dosCalc = '';
-  if (sd.dosis && weight > 0) {
+  if (sd.dosis && weight > 0 && sd.dosis.min > 0) {
     const dMin = sd.dosis.min * weight;
     const dMax = sd.dosis.max * weight;
-    const showRange = dMin !== dMax;
+    const showRange = Math.abs(dMin - dMax) > 0.001;
     dosCalc = `
       <div class="modal-section">
-        <div class="modal-section-title">Berekende dosering voor ${escHtml(speciesLabel)} ${formatNum(weight)} kg</div>
+        <div class="modal-section-title">Berekende dosering – ${escHtml(speciesLabel)} ${formatNum(weight)} kg</div>
         <table class="detail-table">
           <tr><td>Totaaldosis</td><td><strong>${showRange ? formatNum(dMin) + ' – ' + formatNum(dMax) : formatNum(dMin)} mg</strong></td></tr>
-          <tr><td>Per kg</td><td>${sd.dosis.min}${showRange ? ' – ' + sd.dosis.max : ''} mg/kg</td></tr>
+          <tr><td>Per kg</td><td>${sd.dosis.min}${showRange ? ' – ' + sd.dosis.max : ''} ${escHtml(sd.dosis.eenheid)}</td></tr>
           <tr><td>Frequentie</td><td>${escHtml(sd.dosis.frequentie)}</td></tr>
           ${sd.dosis.opmerkingen ? `<tr><td>Opmerking</td><td><em>${escHtml(sd.dosis.opmerkingen)}</em></td></tr>` : ''}
         </table>
       </div>
       ${buildModalRoutes(sd, dMin, dMax)}`;
+  } else if (sd.dosis && sd.dosis.min === 0) {
+    dosCalc = `<div class="modal-section"><div class="modal-section-title">Dosering</div>
+      <p style="color:var(--red);font-weight:700">NIET TOEPASSEN BIJ DEZE SOORT</p></div>`;
+  } else if (sd.dosis) {
+    dosCalc = `
+      <div class="modal-section">
+        <div class="modal-section-title">Dosering – ${escHtml(speciesLabel)}</div>
+        <table class="detail-table">
+          <tr><td>Per kg</td><td>${sd.dosis.min}${sd.dosis.min !== sd.dosis.max ? ' – ' + sd.dosis.max : ''} ${escHtml(sd.dosis.eenheid)}</td></tr>
+          <tr><td>Frequentie</td><td>${escHtml(sd.dosis.frequentie)}</td></tr>
+          ${sd.dosis.opmerkingen ? `<tr><td>Opmerking</td><td><em>${escHtml(sd.dosis.opmerkingen)}</em></td></tr>` : ''}
+        </table>
+        <p style="font-size:.75rem;color:var(--gray-400);margin-top:.5rem">Voer gewicht in voor exacte berekening</p>
+      </div>`;
   }
 
   let warnHtml = '';
   if (sd.waarschuwingen && sd.waarschuwingen.length) {
     const items = sd.waarschuwingen.map(w => {
-      const isDanger = w.startsWith('GEVAAR') || w.startsWith('CRITIEK') || w.startsWith('LETAAL') || w.startsWith('HOOG RISICO') || w.startsWith('KRITIEK');
+      const isDanger = w.startsWith('GEVAAR') || w.startsWith('CRITIEK') || w.startsWith('LETAAL') ||
+        w.startsWith('HOOG RISICO') || w.startsWith('ABSOLUTE') || w.startsWith('LEVENSGEVAARLIJK') || w.startsWith('KRITIEK');
       return `<li class="${isDanger ? 'warn-danger' : 'warn-warning'}">${escHtml(w)}</li>`;
     }).join('');
     warnHtml = `<div class="modal-section">
@@ -265,26 +404,22 @@ function openModal(id, species, weight) {
     </div>`;
   }
 
-  let toxHtml = '';
-  if (med.toxiciteit || sd.toxiciteit) {
-    toxHtml = `<div class="modal-section">
-      <div class="modal-section-title">Toxiciteit</div>
-      <p class="modal-ci"><strong>⚠ ${escHtml(med.toxiciteit || sd.toxiciteit)}</strong></p>
-    </div>`;
-  }
+  const toxHtml = (med.toxiciteit || sd.toxiciteit) ? `<div class="modal-section">
+    <div class="modal-section-title">Toxiciteit</div>
+    <p class="modal-ci"><strong>⚠ ${escHtml(med.toxiciteit || sd.toxiciteit)}</strong></p>
+  </div>` : '';
 
-  let ciHtml = '';
-  if (sd.contra_indicaties && sd.contra_indicaties.length) {
-    ciHtml = `<div class="modal-section">
-      <div class="modal-section-title">Contra-indicaties</div>
-      <p class="modal-ci">${sd.contra_indicaties.map(c => escHtml(c)).join(', ')}</p>
-    </div>`;
-  }
+  const ciHtml = sd.contra_indicaties && sd.contra_indicaties.length ? `<div class="modal-section">
+    <div class="modal-section-title">Contra-indicaties</div>
+    <p class="modal-ci">${sd.contra_indicaties.map(escHtml).join(', ')}</p>
+  </div>` : '';
+
+  const brandText = (med.merknamen || []).join(', ');
 
   document.getElementById('modal-content').innerHTML = `
     <div class="modal-med-name">${escHtml(med.naam)}</div>
     <div class="modal-werkzame">Werkzame stof: ${escHtml(med.werkzameStof)}</div>
-    ${med.merknamen && med.merknamen.length ? `<div class="modal-merknamen">Merknamen: ${med.merknamen.map(escHtml).join(', ')}</div>` : ''}
+    ${brandText ? `<div class="modal-merknamen">Merknamen: ${escHtml(brandText)}</div>` : ''}
     <p style="font-size:.85rem;color:var(--gray-600);margin-bottom:.5rem">${escHtml(med.beschrijving || '')}</p>
     ${toxHtml}
     ${dosCalc}
@@ -294,9 +429,6 @@ function openModal(id, species, weight) {
       <div class="modal-section-title">Bronnen</div>
       <p class="modal-sources">${(sd.bronnen || []).map(escHtml).join(' · ')}</p>
     </div>`;
-
-  document.getElementById('modal-overlay').classList.remove('hidden');
-  document.getElementById('modal-box').scrollTop = 0;
 }
 
 function buildModalRoutes(sd, dMin, dMax) {
@@ -310,17 +442,16 @@ function buildModalRoutes(sd, dMin, dMax) {
     rows.push(['Routes injectie', routes]);
     if (conc) {
       const vMin = dMin / conc, vMax = dMax / conc;
-      rows.push([`Injectie volume (${conc} mg/ml)`, `<strong>${vMin !== vMax ? formatNum(vMin) + ' – ' + formatNum(vMax) : formatNum(vMin)} ml</strong>`]);
+      rows.push([`Injectie (${conc} mg/ml)`, `<strong>${Math.abs(vMin-vMax) > 0.001 ? formatNum(vMin) + ' – ' + formatNum(vMax) : formatNum(vMin)} ml</strong>`]);
     }
     if (t.injectie.opmerkingen) rows.push(['Injectie opmerking', escHtml(t.injectie.opmerkingen)]);
   }
-
   if (t.oraal) {
     const o = t.oraal;
     rows.push(['Toediening oraal', ucFirst(o.type || '—')]);
     if (o.concentratie && o.type === 'vloeistof') {
       const vMin = dMin / o.concentratie, vMax = dMax / o.concentratie;
-      rows.push([`Oraal volume (${o.concentratie} mg/ml)`, `<strong>${vMin !== vMax ? formatNum(vMin) + ' – ' + formatNum(vMax) : formatNum(vMin)} ml</strong>`]);
+      rows.push([`Oraal (${o.concentratie} mg/ml)`, `<strong>${Math.abs(vMin-vMax) > 0.001 ? formatNum(vMin) + ' – ' + formatNum(vMax) : formatNum(vMin)} ml</strong>`]);
     }
     if (o.tabletGrootten) {
       o.tabletGrootten.forEach(t2 => {
@@ -329,7 +460,6 @@ function buildModalRoutes(sd, dMin, dMax) {
     }
     if (o.opmerkingen) rows.push(['Oraal opmerking', escHtml(o.opmerkingen)]);
   }
-
   if (!rows.length) return '';
   return `<div class="modal-section">
     <div class="modal-section-title">Toedieningsroutes & volumes</div>
@@ -347,7 +477,7 @@ function closeModal() {
 function formatNum(n) {
   if (n === undefined || n === null || isNaN(n)) return '—';
   if (n < 0.01) return n.toFixed(4);
-  if (n < 1)    return n.toFixed(3).replace(/\.?0+$/, '');
+  if (n < 1)    return parseFloat(n.toFixed(3)).toString();
   if (n < 10)   return parseFloat(n.toFixed(2)).toString();
   if (n < 100)  return parseFloat(n.toFixed(1)).toString();
   return Math.round(n).toString();
