@@ -1099,6 +1099,59 @@
       }
     },
     {
+      "id": "diazepam",
+      "naam": "Diazepam",
+      "werkzameStof": "Diazepam",
+      "merknamen": ["Stesolid", "Valium", "Diazepam"],
+      "categorie": "sedativum",
+      "beschrijving": "Benzodiazepine; sedatie, premedicatie, anti-epilepticum en spierrelaxans. Reverseerbaar met flumazenil",
+      "soorten": {
+        "hond": {
+          "dosis": { "min": 0.2, "max": 1.0, "eenheid": "mg/kg", "frequentie": "eenmalig/prn", "opmerkingen": "Sedatie/premedicatie: 0.2-0.5 mg/kg IV; Status epilepticus: 0.5-1 mg/kg IV langzaam of 0.5-2 mg/kg rectaal; combineer met ketamine (5-10 mg/kg IV) voor inductie" },
+          "toediening": {
+            "injectie": { "concentratie": 5, "eenheid": "mg/ml", "routes": ["IV", "IM", "rectaal"], "opmerkingen": "Stesolid 5 mg/ml injectievloeistof; rectale toediening via rectiole 5 of 10 mg" }
+          },
+          "waarschuwingen": ["Gecontroleerde stof", "Paradoxale opwinding mogelijk bij gezonde dieren", "Flumazenil als antidotum (0.01-0.02 mg/kg IV)", "Langzaam IV toedienen om apneu te voorkomen"],
+          "contra_indicaties": ["Ernstig leverfalen", "Myasthenia gravis", "Ernstige ademhalingsdepressie"],
+          "bronnen": ["Fidin", "Vetcompendium"]
+        },
+        "kat": {
+          "dosis": { "min": 0.2, "max": 0.5, "eenheid": "mg/kg", "frequentie": "eenmalig/prn", "opmerkingen": "Status epilepticus: 0.5-1 mg/kg IV of rectaal; lage dosis IV (0.05-0.1 mg/kg) voor eetlust­stimulatie. GEEN oraal gebruik!" },
+          "toediening": {
+            "injectie": { "concentratie": 5, "eenheid": "mg/ml", "routes": ["IV", "IM", "rectaal"], "opmerkingen": "Uitsluitend parenteraal of rectaal — oraal geassocieerd met acute hepatotoxiciteit bij katten" }
+          },
+          "waarschuwingen": ["Gecontroleerde stof", "ORAAL GEBRUIK VERMIJDEN — hepatotoxisch bij katten!", "Paradoxale excitatie mogelijk", "Flumazenil als antidotum"],
+          "contra_indicaties": ["Oraal gebruik bij katten", "Ernstig leverfalen", "Myasthenia gravis"],
+          "bronnen": ["Fidin", "Vetcompendium"]
+        },
+        "konijn": {
+          "dosis": { "min": 0.5, "max": 2.0, "eenheid": "mg/kg", "frequentie": "eenmalig", "opmerkingen": "0.5-2 mg/kg IM of IV; combineer met ketamine (15-35 mg/kg IM) voor anesthesie" },
+          "toediening": {
+            "injectie": { "concentratie": 5, "eenheid": "mg/ml", "routes": ["IM", "IV", "rectaal"], "opmerkingen": "" }
+          },
+          "waarschuwingen": ["Gecontroleerde stof", "Combineer met ketamine voor volledige anesthesie", "Warmte­verlies bewaken"],
+          "bronnen": ["KNMVD Formularium Konijn 2022", "Exotic Animal Formulary, 5th Ed. – James W. Carpenter"]
+        },
+        "cavia": {
+          "dosis": { "min": 2.0, "max": 5.0, "eenheid": "mg/kg", "frequentie": "eenmalig", "opmerkingen": "2-5 mg/kg IM voor sedatie; combineer met ketamine voor chirurgische anesthesie" },
+          "toediening": {
+            "injectie": { "concentratie": 5, "eenheid": "mg/ml", "routes": ["IM"], "opmerkingen": "" }
+          },
+          "waarschuwingen": ["Gecontroleerde stof", "Ademhalingsdepressie bewaken"],
+          "bronnen": ["Exotic Animal Formulary, 5th Ed. – James W. Carpenter"]
+        },
+        "paard": {
+          "dosis": { "min": 0.05, "max": 0.1, "eenheid": "mg/kg", "frequentie": "eenmalig", "opmerkingen": "0.05-0.1 mg/kg IV langzaam; uitsluitend in combinatie met andere sedativa of anesthetica (xylazine/ketamine)" },
+          "toediening": {
+            "injectie": { "concentratie": 5, "eenheid": "mg/ml", "routes": ["IV"], "opmerkingen": "Langzaam IV toedienen; niet solo gebruiken — onvoldoende sedatie en kans op excitatie" }
+          },
+          "waarschuwingen": ["Gecontroleerde stof", "Nooit solo inzetten bij paarden — excitatie en vallen risico", "Alleen in combinatie met alpha-2 agonist of ketamine"],
+          "contra_indicaties": ["Monotherapie bij paarden"],
+          "bronnen": ["Fidin", "Vetcompendium"]
+        }
+      }
+    },
+    {
       "id": "medetomidine",
       "naam": "Medetomidine",
       "werkzameStof": "Medetomidine",
