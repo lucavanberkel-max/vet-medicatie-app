@@ -1,38 +1,47 @@
 #!/usr/bin/env python3
 """
-Controleert maandelijks of er nieuwe EU-geautoriseerde diergeneesmiddelen zijn
-die nog niet in medications.json staan. Draait via GitHub Actions en maakt
-automatisch een GitHub Issue aan als er nieuwe middelen gevonden worden.
+Controleert maandelijks of er nieuwe diergeneesmiddelen zijn die nog niet
+in medications.json staan en maakt een GitHub Issue aan als dat zo is.
 
-Data-bron: EMA (European Medicines Agency) — EPAR data voor diergeneesmiddelen
-Als de download-URL niet meer werkt, controleer dan:
-https://www.ema.europa.eu/en/medicines/download-medicine-data
+Primaire bron : Diergeneesmiddeleninformatiebank (DIB) — publieke CSV van CBG-MEB
+                Geen authenticatie nodig.
+                https://www.diergeneesmiddeleninformatiebank.nl
+
+Optionele bron: EMA Union Product Database (UPD) — REST API, OAuth2 vereist.
+                Activeer door EMA_CLIENT_ID en EMA_CLIENT_SECRET in te stellen
+                als GitHub Actions secrets.
+                Registratie: https://upd-portal-prod.azurewebsites.net/updwebui/home
 """
 
+import csv
 import io
 import json
 import os
 import sys
-import urllib.request
 from datetime import datetime, timedelta
-from urllib.error import URLError
+from urllib.error import URLError, HTTPError
+from urllib.parse import urlencode
 from urllib.request import Request, urlopen
 
-# EMA download-URL voor diergeneesmiddelen (EPAR-spreadsheet)
-# Controleer en update dit adres als de download mislukt:
-# https://www.ema.europa.eu/en/medicines/download-medicine-data#veterinary-medicines-section
-EMA_VET_URL = (
-    "https://www.ema.europa.eu/sites/default/files/"
-    "Medicines_output_veterinary_medicines_en.xlsx"
-)
+# ── Configuratie ───────────────────────────────────────────────────────────────
 
-GITHUB_API = "https://api.github.com"
+# DIB CSV — publiek, geen auth
+DIB_CSV_URL = "https://www.diergeneesmiddeleninformatiebank.nl/metadatadib.csv"
+
+# EMA UPD — vul in na registratie (zie onderin dit bestand)
+EMA_UPD_TOKEN_URL = "https://login.microsoftonline.com/{tenant}/oauth2/v2.0/token"
+EMA_UPD_API_URL   = "https://prod-upd-openapi-app.azurewebsites.net/api/v1/MedicinalProduct"
+EMA_UPD_SCOPE     = "api://upd-public-api/.default"
+
+GITHUB_API      = "https://api.github.com"
 MEDICATIONS_PATH = "data/medications.json"
-LOOKBACK_DAYS = 40  # iets meer dan een maand zodat we geen autorisaties missen
+LOOKBACK_DAYS   = 40   # iets meer dan een maand zodat we niets missen
 
+
+# ── Helpers ────────────────────────────────────────────────────────────────────
 
 def load_current_medications():
-    """Laad alle bekende namen/stoffen uit medications.json in een set."""
+    """Geeft een set van alle bekende namen/werkzame stoffen/merknamen."""
     with open(MEDICATIONS_PATH, "r", encoding="utf-8") as f:
         data = json.load(f)
 
@@ -44,153 +53,256 @@ def load_current_medications():
                 known.add(val)
         for merk in med.get("merknamen", []):
             known.add(merk.strip().lower())
-
     return known
 
 
-def fetch_ema_excel():
-    """Download de EMA veterinaire EPAR-spreadsheet en geef de rijen terug."""
-    try:
-        import openpyxl
-    except ImportError:
-        print("openpyxl niet gevonden. Installeer met: pip install openpyxl")
-        sys.exit(1)
+def _find_col(headers, *keywords):
+    """Zoek de eerste kolomnaam (case-insensitief) die een keyword bevat."""
+    hl = [h.lower() for h in headers]
+    for kw in keywords:
+        for i, h in enumerate(hl):
+            if kw in h:
+                return headers[i]
+    return None
 
-    print(f"EMA data downloaden van:\n  {EMA_VET_URL}")
+
+def _is_new(name, inn, known):
+    """True als naam of INN niet in de bekende set voorkomt."""
+    for cand in {name.lower(), inn.lower()} - {""}:
+        if cand in known:
+            return False
+        if any(cand in k or k in cand for k in known if len(k) > 4):
+            return False
+    return True
+
+
+def _parse_date(raw):
+    """Parseer een datumstring naar datetime; geeft None bij mislukking."""
+    if isinstance(raw, datetime):
+        return raw
+    for fmt in ("%Y-%m-%d", "%d-%m-%Y", "%d/%m/%Y", "%Y%m%d"):
+        try:
+            return datetime.strptime(str(raw).strip()[:10], fmt)
+        except ValueError:
+            continue
+    return None
+
+
+# ── Bron 1: DIB CSV ────────────────────────────────────────────────────────────
+
+def fetch_dib_csv():
+    """
+    Download de publieke metadata-CSV van de Diergeneesmiddeleninformatiebank.
+    Geeft (records: list[dict], headers: list[str]) terug.
+    """
+    print(f"DIB CSV downloaden van:\n  {DIB_CSV_URL}")
     req = Request(
-        EMA_VET_URL,
-        headers={"User-Agent": "vet-medicatie-checker/1.0 (github-actions)"},
+        DIB_CSV_URL,
+        headers={"User-Agent": "vet-medicatie-checker/2.0 (github-actions)"},
     )
-
     try:
         with urlopen(req, timeout=60) as resp:
             raw = resp.read()
     except URLError as e:
-        print(f"\nFout bij downloaden EMA data: {e}")
-        print("Controleer de URL bovenaan dit script.")
-        print("Zie: https://www.ema.europa.eu/en/medicines/download-medicine-data")
-        sys.exit(1)
+        print(f"Fout bij downloaden DIB CSV: {e}")
+        print("Controleer: https://www.diergeneesmiddeleninformatiebank.nl")
+        return None, None
 
-    wb = openpyxl.load_workbook(io.BytesIO(raw), read_only=True, data_only=True)
-    ws = wb.active
-    rows = list(ws.iter_rows(values_only=True))
+    # Probeer UTF-8, val terug op latin-1 (veelgebruikt door NL overheidsbestanden)
+    for enc in ("utf-8-sig", "utf-8", "latin-1"):
+        try:
+            text = raw.decode(enc)
+            break
+        except UnicodeDecodeError:
+            continue
+    else:
+        print("Kon CSV niet decoderen.")
+        return None, None
 
-    if not rows:
-        print("Spreadsheet is leeg — controleer de URL.")
-        sys.exit(1)
+    reader = csv.DictReader(io.StringIO(text), delimiter=";")
+    records = list(reader)
+    headers = reader.fieldnames or []
 
-    headers = [str(h).strip().lower() if h else "" for h in rows[0]]
-    records = [dict(zip(headers, row)) for row in rows[1:] if any(row)]
-
-    print(f"  {len(records)} rijen ingeladen, kolommen: {[h for h in headers if h][:8]}...")
-    return records, headers
-
-
-def _find_col(headers, *keywords):
-    """Zoek de eerste kolomnaam die een van de keywords bevat."""
-    for kw in keywords:
-        for h in headers:
-            if kw in h:
-                return h
-    return None
+    print(f"  {len(records)} rijen geladen | kolommen: {list(headers)[:6]}...")
+    return records, list(headers)
 
 
-def find_new_medicines(records, headers, known):
-    """Filter op recent geautoriseerde middelen die niet in onze database staan."""
+def find_new_dib(records, headers, known):
+    """Filter DIB-records op recent geregistreerde middelen die ontbreken."""
+    if not records:
+        return []
+
     cutoff = datetime.now() - timedelta(days=LOOKBACK_DAYS)
 
-    name_col   = _find_col(headers, "medicine name", "product name")
-    inn_col    = _find_col(headers, "inn", "common name", "active substance", "substance")
-    date_col   = _find_col(headers, "date of authorisation", "authorisation date", "decision date")
-    status_col = _find_col(headers, "authorisation status", "status")
+    name_col   = _find_col(headers, "naam", "productnaam", "name")
+    inn_col    = _find_col(headers, "werkzame stof", "werkzamestof", "substance", "inn")
+    date_col   = _find_col(headers, "datum", "registratiedatum", "date")
+    status_col = _find_col(headers, "status")
 
-    print(f"  Kolomkoppelingen: naam={name_col!r}, INN={inn_col!r}, datum={date_col!r}, status={status_col!r}")
+    print(f"  Kolommen → naam:{name_col!r}  INN:{inn_col!r}  "
+          f"datum:{date_col!r}  status:{status_col!r}")
 
     new_meds = []
-
     for rec in records:
-        # Sla ingetrokken of geweigerde autorisaties over
         if status_col:
-            status = str(rec.get(status_col) or "").lower()
-            if any(w in status for w in ("withdrawn", "refused", "expired")):
+            st = str(rec.get(status_col) or "").lower()
+            if any(w in st for w in ("ingetrokken", "vervallen", "withdrawn", "refused")):
                 continue
 
-        # Filter op autorisatiedatum
         if date_col:
-            raw_date = rec.get(date_col)
-            auth_date = None
-            if isinstance(raw_date, datetime):
-                auth_date = raw_date
-            elif raw_date:
-                for fmt in ("%Y-%m-%d", "%d/%m/%Y", "%d-%m-%Y"):
-                    try:
-                        auth_date = datetime.strptime(str(raw_date)[:10], fmt)
-                        break
-                    except ValueError:
-                        continue
-            if auth_date is None or auth_date < cutoff:
+            d = _parse_date(rec.get(date_col))
+            if d is None or d < cutoff:
                 continue
 
-        med_name = str(rec.get(name_col) or "").strip()
-        inn      = str(rec.get(inn_col)  or "").strip()
+        naam = str(rec.get(name_col) or "").strip() if name_col else ""
+        inn  = str(rec.get(inn_col)  or "").strip() if inn_col  else ""
 
-        if not med_name and not inn:
+        if not naam and not inn:
+            continue
+        if not _is_new(naam, inn, known):
             continue
 
-        # Check of het al in onze database staat (op naam of werkzame stof)
-        candidates = {med_name.lower(), inn.lower()}
-        candidates.discard("")
-
-        already_known = any(
-            cand in known or any(cand in k or k in cand for k in known if len(k) > 4)
-            for cand in candidates
-        )
-
-        if not already_known:
-            new_meds.append({
-                "naam":  med_name,
-                "inn":   inn,
-                "datum": str(rec.get(date_col, "")) if date_col else "onbekend",
-            })
+        new_meds.append({
+            "naam":  naam,
+            "inn":   inn,
+            "datum": str(rec.get(date_col, "—")) if date_col else "—",
+            "bron":  "DIB (CBG-MEB)",
+        })
 
     return new_meds
 
 
+# ── Bron 2: EMA UPD (optioneel — vereist registratie) ──────────────────────────
+
+def get_ema_token(client_id, client_secret, tenant_id):
+    """
+    Haal een OAuth2 Bearer Token op via Client Credentials flow.
+    Vereist registratie op: https://upd-portal-prod.azurewebsites.net/updwebui/home
+    """
+    token_url = EMA_UPD_TOKEN_URL.format(tenant=tenant_id)
+    payload = urlencode({
+        "grant_type":    "client_credentials",
+        "client_id":     client_id,
+        "client_secret": client_secret,
+        "scope":         EMA_UPD_SCOPE,
+    }).encode()
+
+    req = Request(token_url, data=payload, method="POST")
+    try:
+        with urlopen(req, timeout=30) as resp:
+            data = json.load(resp)
+        return data.get("access_token")
+    except Exception as e:
+        print(f"EMA token ophalen mislukt: {e}")
+        return None
+
+
+def fetch_ema_upd(token, known):
+    """
+    Bevraag de EMA UPD REST API voor recent geregistreerde veterinaire middelen.
+    Vereist een geldig Bearer Token (zie get_ema_token).
+    """
+    cutoff = (datetime.now() - timedelta(days=LOOKBACK_DAYS)).strftime("%Y-%m-%d")
+
+    # Filter op veterinaire middelen geregistreerd na cutoff-datum
+    params = urlencode({
+        "productType":        "veterinary",
+        "authorisationDateGt": cutoff,
+        "pageSize":           200,
+    })
+    url = f"{EMA_UPD_API_URL}?{params}"
+
+    req = Request(url, headers={
+        "Authorization": f"Bearer {token}",
+        "Accept":        "application/json",
+    })
+
+    try:
+        with urlopen(req, timeout=60) as resp:
+            data = json.load(resp)
+    except HTTPError as e:
+        print(f"EMA UPD API fout {e.code}: {e.reason}")
+        return []
+    except URLError as e:
+        print(f"EMA UPD verbindingsfout: {e}")
+        return []
+
+    items = data.get("items") or data.get("results") or (data if isinstance(data, list) else [])
+    print(f"  EMA UPD: {len(items)} middelen ontvangen")
+
+    new_meds = []
+    for item in items:
+        naam = str(item.get("name") or item.get("productName") or "").strip()
+        inn  = str(item.get("activeSubstance") or item.get("inn") or "").strip()
+        datum = str(item.get("authorisationDate") or "—")
+
+        if not naam and not inn:
+            continue
+        if not _is_new(naam, inn, known):
+            continue
+
+        new_meds.append({
+            "naam":  naam,
+            "inn":   inn,
+            "datum": datum,
+            "bron":  "EMA UPD",
+        })
+
+    return new_meds
+
+
+# ── GitHub Issue aanmaken ──────────────────────────────────────────────────────
+
 def create_github_issue(new_meds):
-    """Maak een GitHub Issue aan met de gevonden nieuwe medicaties."""
     token = os.environ.get("GH_TOKEN")
     repo  = os.environ.get("REPO")
 
     if not token or not repo:
         print("\nGH_TOKEN of REPO niet ingesteld — issue overgeslagen.")
-        print("Nieuw gevonden middelen:")
         for m in new_meds:
-            print(f"  - {m['naam']} ({m['inn']}) — {m['datum']}")
+            print(f"  - [{m['bron']}] {m['naam']} ({m['inn']}) — {m['datum']}")
         return
 
     today = datetime.now().strftime("%Y-%m-%d")
     count = len(new_meds)
 
-    tabel_rijen = "\n".join(
-        f"| {m['naam']} | {m['inn']} | {m['datum']} |"
-        for m in new_meds[:50]
-    )
-    extra = f"\n| _(en nog {count - 50} andere...)_ | | |" if count > 50 else ""
+    # Splits per bron voor overzicht in het issue
+    dib_meds = [m for m in new_meds if m["bron"] == "DIB (CBG-MEB)"]
+    ema_meds = [m for m in new_meds if m["bron"] == "EMA UPD"]
+
+    def tabel(meds):
+        rijen = "\n".join(f"| {m['naam']} | {m['inn']} | {m['datum']} |" for m in meds[:50])
+        extra = f"\n| _(+{len(meds)-50} meer)_ | | |" if len(meds) > 50 else ""
+        return rijen + extra
+
+    secties = ""
+    if dib_meds:
+        secties += f"""
+### 🇳🇱 Diergeneesmiddeleninformatiebank (CBG-MEB) — {len(dib_meds)} nieuw
+
+| Productnaam | Werkzame stof | Registratiedatum |
+|-------------|---------------|-----------------|
+{tabel(dib_meds)}
+"""
+    if ema_meds:
+        secties += f"""
+### 🇪🇺 EMA Union Product Database — {len(ema_meds)} nieuw
+
+| Productnaam | Werkzame stof | Autorisatiedatum |
+|-------------|---------------|-----------------|
+{tabel(ema_meds)}
+"""
 
     body = f"""## Maandelijkse Medicatie Check — {today}
 
-Er zijn **{count} mogelijk nieuwe** EU-geregistreerde diergeneesmiddelen gevonden die nog niet in `medications.json` staan.
-
+Er zijn **{count} mogelijk nieuwe** geregistreerde diergeneesmiddelen gevonden die nog niet in `medications.json` staan.
+{secties}
 ### Actie vereist
-Controleer onderstaande middelen en voeg ze toe als ze relevant zijn voor de app:
+Controleer de bovenstaande middelen en voeg ze toe indien relevant.
 
-| Merknaam | Werkzame stof (INN) | Autorisatiedatum |
-|----------|---------------------|-----------------|
-{tabel_rijen}{extra}
-
-### Bronnen om te checken
-- [EudraPharm](https://medicines.eudrapharm.eu/) — EU database diergeneesmiddelen
-- [EMA Veterinary Medicines](https://www.ema.europa.eu/en/veterinary-regulatory/overview) — dosering via SmPC's
+### Bronnen voor dosering
+- [Diergeneesmiddeleninformatiebank](https://www.diergeneesmiddeleninformatiebank.nl/) — NL database met SmPC's
+- [EMA Veterinary Medicines](https://medicines.health.europa.eu/veterinary/en) — EU zoekinterface
 
 ---
 _Automatisch gegenereerd door de maandelijkse check workflow._"""
@@ -212,7 +324,6 @@ _Automatisch gegenereerd door de maandelijkse check workflow._"""
         },
         method="POST",
     )
-
     try:
         with urlopen(req) as resp:
             result = json.load(resp)
@@ -222,22 +333,52 @@ _Automatisch gegenereerd door de maandelijkse check workflow._"""
         sys.exit(1)
 
 
+# ── Main ───────────────────────────────────────────────────────────────────────
+
 def main():
     print("=== Maandelijkse Medicatie Check ===\n")
 
     known = load_current_medications()
     print(f"Huidige database: {len(known)} bekende stoffen/namen\n")
 
-    records, headers = fetch_ema_excel()
+    all_new = []
 
-    new_meds = find_new_medicines(records, headers, known)
-    print(f"\nMogelijk nieuwe middelen: {len(new_meds)}")
+    # ── Bron 1: DIB CSV (altijd) ──
+    records, headers = fetch_dib_csv()
+    if records:
+        dib_new = find_new_dib(records, headers, known)
+        print(f"  Nieuw via DIB: {len(dib_new)}")
+        all_new.extend(dib_new)
+    else:
+        print("  DIB download mislukt — bron overgeslagen.")
 
-    if not new_meds:
+    # ── Bron 2: EMA UPD (alleen als credentials beschikbaar zijn) ──
+    ema_client_id     = os.environ.get("EMA_CLIENT_ID")
+    ema_client_secret = os.environ.get("EMA_CLIENT_SECRET")
+    ema_tenant_id     = os.environ.get("EMA_TENANT_ID")
+
+    if ema_client_id and ema_client_secret and ema_tenant_id:
+        print("\nEMA UPD credentials gevonden — API bevragen...")
+        token = get_ema_token(ema_client_id, ema_client_secret, ema_tenant_id)
+        if token:
+            ema_new = fetch_ema_upd(token, known)
+            # Dedupliceer t.o.v. al gevonden DIB-middelen
+            dib_names = {m["naam"].lower() for m in all_new}
+            ema_new = [m for m in ema_new if m["naam"].lower() not in dib_names]
+            print(f"  Nieuw via EMA UPD (na dedup): {len(ema_new)}")
+            all_new.extend(ema_new)
+    else:
+        print("\nEMA_CLIENT_ID/SECRET/TENANT_ID niet ingesteld → EMA UPD overgeslagen.")
+        print("Zie registratie-instructies in README of vraag je beheerder.")
+
+    # ── Resultaat ──
+    print(f"\nTotaal mogelijk nieuw: {len(all_new)}")
+
+    if not all_new:
         print("Geen nieuwe middelen gevonden — database lijkt up-to-date!")
         return
 
-    create_github_issue(new_meds)
+    create_github_issue(all_new)
 
 
 if __name__ == "__main__":

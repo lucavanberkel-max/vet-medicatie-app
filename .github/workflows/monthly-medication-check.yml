@@ -19,11 +19,12 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: Installeer dependencies
-        run: pip install requests openpyxl
-
       - name: Controleer nieuwe medicaties
         run: python scripts/check_new_medications.py
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           REPO: ${{ github.repository }}
+          # EMA UPD (optioneel) — voeg toe zodra je geregistreerd bent:
+          # EMA_CLIENT_ID:     ${{ secrets.EMA_CLIENT_ID }}
+          # EMA_CLIENT_SECRET: ${{ secrets.EMA_CLIENT_SECRET }}
+          # EMA_TENANT_ID:     ${{ secrets.EMA_TENANT_ID }}
