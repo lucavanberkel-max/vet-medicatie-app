@@ -14,7 +14,7 @@
       "id": "meloxicam",
       "naam": "Meloxicam",
       "werkzameStof": "Meloxicam",
-      "merknamen": ["Metacam", "Meloxidyl", "Inflacam"],
+      "merknamen": ["Metacam", "Meloxidyl", "Inflacam", "Loxicom", "Rheumocam", "Melovem", "Meloxoral", "Novem"],
       "categorie": "pijnstiller",
       "beschrijving": "NSAID (niet-steroïdaal anti-inflammatoir) voor pijn- en ontstekingsbestrijding",
       "soorten": {
@@ -122,7 +122,7 @@
       "id": "carprofen",
       "naam": "Carprofen",
       "werkzameStof": "Carprofen",
-      "merknamen": ["Rimadyl", "Carprieve", "Carprodyl"],
+      "merknamen": ["Rimadyl", "Carprieve", "Carprodyl", "Canidryl", "Dolagis", "Norocarp", "Carprox"],
       "categorie": "pijnstiller",
       "beschrijving": "NSAID voor pijn en ontsteking, voornamelijk gebruikt bij honden",
       "soorten": {
@@ -151,7 +151,7 @@
       "id": "flunixine",
       "naam": "Flunixine meglumine",
       "werkzameStof": "Flunixine meglumine",
-      "merknamen": ["Finadyne", "Flunixin", "Meflosyl"],
+      "merknamen": ["Finadyne", "Flunixin", "Meflosyl", "Flunidol", "Cronyxin", "Flunimeg"],
       "categorie": "pijnstiller",
       "beschrijving": "Krachtig NSAID voor pijn en koorts, met name bij grote landbouwdieren",
       "soorten": {
@@ -194,7 +194,7 @@
       "id": "amoxicilline",
       "naam": "Amoxicilline",
       "werkzameStof": "Amoxicilline",
-      "merknamen": ["Amoxi", "Amoxiject", "Betamox", "Hostamox"],
+      "merknamen": ["Amoxi", "Amoxiject", "Betamox", "Hostamox", "Clamoxyl", "Amoxibactin", "Vetrimoxin", "Amoxinsol"],
       "categorie": "antibioticum",
       "beschrijving": "Breedspectrum penicilline-antibioticum, actief tegen grampositive en gramnegative bacteriën",
       "soorten": {
@@ -265,7 +265,7 @@
       "id": "amoxicilline-clavulaanzuur",
       "naam": "Amoxicilline-clavulaanzuur",
       "werkzameStof": "Amoxicilline + Clavulaanzuur",
-      "merknamen": ["Synulox", "Clavaseptin", "Augmentin vet"],
+      "merknamen": ["Synulox", "Clavaseptin", "Augmentin vet", "Clavobactin", "Nisamox", "Augmaxcil"],
       "categorie": "antibioticum",
       "beschrijving": "Breedspectrum penicilline-combinatie met bètalactamase-remmer; actief tegen resistente stammen",
       "soorten": {
@@ -303,7 +303,7 @@
       "id": "enrofloxacine",
       "naam": "Enrofloxacine",
       "werkzameStof": "Enrofloxacine",
-      "merknamen": ["Baytril", "Enroxil", "Enrocare"],
+      "merknamen": ["Baytril", "Enroxil", "Enrocare", "Floxibac", "Quinolox", "Enroflox", "Enrobactin", "Fenoflox"],
       "categorie": "antibioticum",
       "beschrijving": "Fluorquinolon antibioticum; breedspectrum, ook actief tegen mycoplasma",
       "soorten": {
@@ -392,7 +392,7 @@
       "id": "doxycycline",
       "naam": "Doxycycline",
       "werkzameStof": "Doxycycline",
-      "merknamen": ["Ronaxan", "Vibravet", "Doxymycin"],
+      "merknamen": ["Ronaxan", "Vibravet", "Doxymycin", "Doxybiotic", "Doxybactin", "Doxoral", "Veteridoxin"],
       "categorie": "antibioticum",
       "beschrijving": "Tetracycline antibioticum; actief tegen intracellulaire bacteriën, Chlamydia, Mycoplasma, Rickettsiae",
       "soorten": {
@@ -459,7 +459,7 @@
       "id": "metronidazol",
       "naam": "Metronidazol",
       "werkzameStof": "Metronidazol",
-      "merknamen": ["Flagyl", "Metrobactin"],
+      "merknamen": ["Flagyl", "Metrobactin", "Stomorgyl", "Metronidazol Kela", "Metrovet"],
       "categorie": "antibioticum",
       "beschrijving": "Antibioticum en antiprotozoair; actief tegen anaëroben en protozoën (Giardia, Trichomonas)",
       "soorten": {
@@ -511,7 +511,7 @@
       "id": "trimethoprim-sulfa",
       "naam": "Trimethoprim-sulfamethoxazol",
       "werkzameStof": "Trimethoprim + Sulfamethoxazol",
-      "merknamen": ["Tribrissen", "Bactrimel vet", "Co-Trimazol"],
+      "merknamen": ["Tribrissen", "Bactrimel vet", "Co-Trimazol", "Borgal", "Cosumix Plus", "Trimoxazol", "Sulfotrim"],
       "categorie": "antibioticum",
       "beschrijving": "Sulfonamide-combinatie; breedspectrum antibioticum inclusief Pneumocystis",
       "soorten": {
@@ -622,7 +622,7 @@
       "id": "butorfanol",
       "naam": "Butorfanol",
       "werkzameStof": "Butorfanol",
-      "merknamen": ["Torbugesic", "Dolorex"],
+      "merknamen": ["Torbugesic", "Dolorex", "Alvegesic"],
       "categorie": "analgeticum",
       "beschrijving": "Kappa-opioid agonist/mu-antagonist; analgesie + sedatie; ook gebruikt als hoestdempend middel",
       "soorten": {
@@ -752,7 +752,7 @@
       "id": "dexamethason",
       "naam": "Dexamethason",
       "werkzameStof": "Dexamethason",
-      "merknamen": ["Dexafort", "Rapidexon", "Dexamethason"],
+      "merknamen": ["Dexafort", "Rapidexon", "Colvasone", "Dexamethasone Kela", "Dexapent"],
       "categorie": "corticosteroïd",
       "beschrijving": "Krachtig glucocorticoïd (7-10x sterker dan prednisolon); ook voor shock-behandeling",
       "soorten": {
@@ -869,7 +869,7 @@
       "id": "furosemide",
       "naam": "Furosemide",
       "werkzameStof": "Furosemide",
-      "merknamen": ["Lasix", "Furosemide"],
+      "merknamen": ["Lasix", "Dimazon", "Frusol", "Furosemide Alfasan"],
       "categorie": "diureticum",
       "beschrijving": "Lisdiureticum; actief bij hartfalen, longoedeem, ascites",
       "soorten": {
@@ -932,7 +932,7 @@
       "id": "ivermectine",
       "naam": "Ivermectine",
       "werkzameStof": "Ivermectine",
-      "merknamen": ["Ivomec", "Eqvalan", "Ivermectin"],
+      "merknamen": ["Ivomec", "Eqvalan", "Noromectin", "Ivermectin Alfasan", "Bimectin", "Closamectin"],
       "categorie": "antiparasitair",
       "beschrijving": "Macrocyclisch lactone; actief tegen nematoden, mijten, luizen. NIET actief tegen teken of vlooien",
       "soorten": {
@@ -994,7 +994,7 @@
       "id": "fenbendazol",
       "naam": "Fenbendazol",
       "werkzameStof": "Fenbendazol",
-      "merknamen": ["Panacur", "Fencare"],
+      "merknamen": ["Panacur", "Fencare", "Fenbendazol Alfasan", "Wormkur"],
       "categorie": "antiparasitair",
       "beschrijving": "Breedspectrum benzimidazool-anthelmintica; actief tegen rond- en lintworminfecties, Giardia",
       "soorten": {
@@ -1102,7 +1102,7 @@
       "id": "medetomidine",
       "naam": "Medetomidine",
       "werkzameStof": "Medetomidine",
-      "merknamen": ["Domitor", "Sedastart"],
+      "merknamen": ["Domitor", "Sedastart", "Medetomidine Alfasan"],
       "categorie": "sedativum",
       "beschrijving": "Alpha-2 adrenoreceptor agonist; sedatie en analgesie; reverseerbaar met atipamezol",
       "soorten": {
@@ -1136,7 +1136,7 @@
       "id": "marbofloxacine",
       "naam": "Marbofloxacine",
       "werkzameStof": "Marbofloxacine",
-      "merknamen": ["Marbocyl", "Zeniquin"],
+      "merknamen": ["Marbocyl", "Zeniquin", "Marbofloxacine Kela", "Forcyl"],
       "categorie": "antibioticum",
       "beschrijving": "Fluorquinolon antibioticum; vergelijkbaar met enrofloxacine, ook actief tegen mycoplasma",
       "soorten": {
@@ -1173,7 +1173,7 @@
       "id": "ketamine",
       "naam": "Ketamine",
       "werkzameStof": "Ketamine",
-      "merknamen": ["Narketan", "Ketavet", "Ketamine Alfasan"],
+      "merknamen": ["Narketan", "Ketavet", "Ketamine Alfasan", "Nimatek", "Vétofol"],
       "categorie": "sedativum",
       "beschrijving": "Dissociatief anestheticum; altijd combineren met sedativum (bijv. medetomidine of midazolam) voor betere spierrelaxatie",
       "soorten": {
@@ -1348,7 +1348,7 @@
       "id": "propofol",
       "naam": "Propofol",
       "werkzameStof": "Propofol",
-      "merknamen": ["Rapinovet", "PropoFlo", "Propofol-Lipuro"],
+      "merknamen": ["Rapinovet", "PropoFlo", "Propofol-Lipuro", "Propovet", "Vetofol"],
       "categorie": "sedativum",
       "beschrijving": "Intraveneus anestheticum voor inductie en TIVA; korte werkingsduur, snell herstel",
       "soorten": {
@@ -1375,7 +1375,7 @@
       "id": "clindamycine",
       "naam": "Clindamycine",
       "werkzameStof": "Clindamycine",
-      "merknamen": ["Antirobe", "Clindaseptin", "Clindamycin"],
+      "merknamen": ["Antirobe", "Clindaseptin", "Clindamycin", "Clindoral", "Clinacin"],
       "categorie": "antibioticum",
       "beschrijving": "Lincosamide antibioticum; actief tegen grampositive bacteriën en anaëroben; uitstekend voor tandinfecties en botinfecties",
       "soorten": {
@@ -1409,7 +1409,7 @@
       "id": "cefalexine",
       "naam": "Cefalexine",
       "werkzameStof": "Cefalexine",
-      "merknamen": ["Rilexine", "Ceporex", "Cephacare"],
+      "merknamen": ["Rilexine", "Ceporex", "Cephacare", "Therios", "Cephalexin Norbrook"],
       "categorie": "antibioticum",
       "beschrijving": "Eerste generatie cefalosporine; actief tegen grampositive bacteriën en sommige gramnegatieven; goed voor huid- en wondinfecties",
       "soorten": {
@@ -1463,7 +1463,7 @@
       "id": "fenobarbital",
       "naam": "Fenobarbital",
       "werkzameStof": "Fenobarbital",
-      "merknamen": ["Phenoleptil", "Solfoton", "Luminal vet"],
+      "merknamen": ["Phenoleptil", "Phenoral", "Solfoton", "Luminal vet"],
       "categorie": "analgeticum",
       "beschrijving": "Barbituraat anti-epilepticum; eerste keuze middel bij epilepsie bij hond en kat",
       "soorten": {
@@ -1991,7 +1991,7 @@
       "id": "procainepenicilline",
       "naam": "Procaïnepenicilline",
       "werkzameStof": "Procaïnebenzylpenicilline",
-      "merknamen": ["Depocillin", "Procapen", "Penicilline Norbrook"],
+      "merknamen": ["Depocillin", "Procapen", "Penicilline Norbrook", "Norocillin", "Procacilline"],
       "categorie": "antibioticum",
       "beschrijving": "Depot-penicilline voor injectie; actief tegen grampositive bacteriën; langwerkend door procaïne depot; geregistreerd in EU voor landbouwdieren",
       "soorten": {
