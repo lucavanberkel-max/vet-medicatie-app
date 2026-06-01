@@ -1,0 +1,29 @@
+name: Maandelijkse Medicatie Check
+
+on:
+  schedule:
+    - cron: '0 9 1 * *'  # Elke 1e van de maand om 9:00 UTC
+  workflow_dispatch:      # Handmatig te starten via GitHub UI
+
+jobs:
+  check-medications:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Installeer dependencies
+        run: pip install requests openpyxl
+
+      - name: Controleer nieuwe medicaties
+        run: python scripts/check_new_medications.py
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
